@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DataVisual SV — Demo Restaurante v2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#F8FAFC;color:#1E293B;font-size:13px}
+:root{--nav:#1B3A5C;--acc:#E8A020;--teal:#0E7490;--g:#059669;--r:#DC2626;--card:#fff;--b:#E2E8F0}
+.topbar{background:var(--nav);padding:8px 20px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.topbar h1{color:#fff;font-size:15px;font-weight:700;flex:1;text-align:center}
+.topbar .brand{color:rgba(255,255,255,.5);font-size:11px;letter-spacing:1px;white-space:nowrap}
+.topbar .badge{background:var(--acc);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.sbar{background:linear-gradient(135deg,#0E7490,#1B3A5C);padding:9px 20px;display:flex;align-items:center;gap:10px}
+.sbar .si h2{color:#fff;font-size:13px;font-weight:700}.sbar .si p{color:#BAE6FD;font-size:11px}
+.sbar .per{margin-left:auto;background:rgba(255,255,255,.15);border-radius:6px;padding:4px 10px;color:#fff;font-size:11px;font-weight:600}
+.fbar{background:#fff;padding:8px 20px;border-bottom:1px solid var(--b);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fbar label{font-size:11px;font-weight:600;color:#64748B}
+.fbar select{border:1px solid var(--b);border-radius:5px;padding:4px 8px;font-size:11px;cursor:pointer;color:#1E293B}
+.wm{margin-left:auto;font-size:10px;color:#CBD5E1;font-weight:700;letter-spacing:1px}
+.kgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:12px 20px}
+.kpi{background:#fff;border-radius:10px;padding:11px 13px;border:1px solid var(--b);border-left:4px solid #94A3B8}
+.kpi.g{border-left-color:var(--g)}.kpi.r{border-left-color:var(--r)}.kpi.t{border-left-color:var(--teal)}.kpi.a{border-left-color:var(--acc)}
+.kpi .lbl{font-size:9px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px}
+.kpi .val{font-size:19px;font-weight:800;color:#0F172A;margin:3px 0 2px}
+.kpi .dlt{font-size:10px;font-weight:600}.up{color:var(--g)}.dn{color:var(--r)}
+.kpi .sub{font-size:9px;color:#94A3B8}
+.row2{display:grid;grid-template-columns:2fr 1fr;gap:10px;padding:0 20px 10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 20px 16px}
+.card{background:#fff;border-radius:10px;border:1px solid var(--b);padding:13px}
+.card h3{font-size:12px;font-weight:700;color:#0F172A;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.card h3 .tag{background:#EFF6FF;color:var(--teal);font-size:9px;padding:1px 6px;border-radius:20px;font-weight:600}
+.food-item{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #F8FAFC;font-size:11px}
+.food-item:last-child{border:none}
+.fn{width:110px;font-weight:600;color:#334155;font-size:10px}
+.fb{flex:1;background:#F1F5F9;border-radius:3px;height:8px;overflow:hidden}
+.ff{height:100%;border-radius:3px}
+.fp{width:35px;text-align:right;font-weight:700;font-size:10px}
+.tbl{width:100%;border-collapse:collapse;font-size:10px}
+.tbl th{background:#F8FAFC;color:#64748B;font-weight:700;padding:5px 7px;text-align:left;border-bottom:2px solid var(--b);text-transform:uppercase;font-size:9px}
+.tbl td{padding:5px 7px;border-bottom:1px solid #F8FAFC;color:#374151}
+.tbl tr:hover td{background:#F8FAFC}
+.alert{background:#FEF3C7;border-left:3px solid #F59E0B;padding:8px 20px;font-size:11px;color:#78350F;margin-bottom:2px}
+.disc{background:#F1F5F9;padding:5px 20px;font-size:9px;color:#94A3B8;text-align:center;border-top:1px solid var(--b)}
+.footer{background:var(--nav);text-align:center;padding:6px;color:rgba(255,255,255,.35);font-size:9px;letter-spacing:.5px}
+/* tabs */
+.tabs{display:flex;gap:2px;padding:8px 20px 0;border-bottom:1px solid var(--b);background:#fff}
+.tab{padding:6px 14px;font-size:11px;font-weight:600;color:#64748B;cursor:pointer;border-bottom:2px solid transparent;transition:.2s}
+.tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+.tabcontent{display:none}.tabcontent.active{display:block}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">DATAVISUAL SV</div>
+  <h1>🍽️ Dashboard Restaurante — Demo Interactiva</h1>
+  <div class="badge">DEMO v2</div>
+</div>
+<div class="sbar">
+  <div class="si"><h2>El Rincón Familiar, S.A.</h2><p>Restaurante · San Salvador · Actualizado automáticamente</p></div>
+  <div class="per" id="perLabel">📅 Mayo 2025</div>
+</div>
+<div class="fbar">
+  <label>Período:</label>
+  <select id="fPer" onchange="render()"><option value="0">Mayo 2025</option><option value="1">Abril 2025</option><option value="2">Marzo 2025</option></select>
+  <label>Semana:</label>
+  <select id="fSem" onchange="render()"><option value="all">Todo el mes</option><option value="0">Semana 1</option><option value="1">Semana 2</option><option value="2">Semana 3</option><option value="3">Semana 4</option></select>
+  <div class="wm">DEMO · datavisualsv.com</div>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('ventas',this)">📈 Ventas</div>
+  <div class="tab" onclick="switchTab('costos',this)">🥩 Food Cost</div>
+  <div class="tab" onclick="switchTab('equipo',this)">🧑‍🍳 Equipo</div>
+  <div class="tab" onclick="switchTab('kpis',this)">📊 KPIs</div>
+</div>
+
+<div id="tab-ventas" class="tabcontent active">
+<div class="kgrid" id="kpiGrid"></div>
+<div class="alert" id="alertBox"></div>
+<div class="row2">
+  <div class="card"><h3>📈 Ventas Diarias <span class="tag">por día del mes</span></h3><canvas id="cVentas" height="90"></canvas></div>
+  <div class="card"><h3>🍕 Ventas por Plato <span class="tag">Top 6</span></h3><canvas id="cPlatos" height="160"></canvas></div>
+</div>
+</div>
+
+<div id="tab-costos" class="tabcontent">
+<div style="padding:12px 20px 0">
+  <div class="card"><h3>🥩 Food Cost por Plato <span class="tag">meta &lt; 30% · verde=bien · rojo=problema</span></h3><div id="foodCostList" style="columns:2;gap:20px;padding-top:4px"></div></div>
+</div>
+<div class="row2" style="padding-top:10px">
+  <div class="card"><h3>📊 Tendencia Food Cost <span class="tag">últimos 6 meses</span></h3><canvas id="cFoodTrend" height="100"></canvas></div>
+  <div class="card"><h3>💰 Estructura de Costos <span class="tag">mayo</span></h3><canvas id="cCostos" height="160"></canvas></div>
+</div>
+</div>
+
+<div id="tab-equipo" class="tabcontent">
+<div class="row2" style="padding-top:12px">
+  <div class="card"><h3>🏆 Ranking Meseros <span class="tag">ventas del mes</span></h3><table class="tbl" id="tMeseros"></table></div>
+  <div class="card"><h3>⏰ Ventas por Hora <span class="tag">promedio diario</span></h3><canvas id="cHoras" height="160"></canvas></div>
+</div>
+</div>
+
+<div id="tab-kpis" class="tabcontent">
+<div style="padding:12px 20px 0">
+  <div class="card"><h3>📅 Comparativo Mensual <span class="tag">3 meses</span></h3><canvas id="cComp" height="80"></canvas></div>
+</div>
+<div class="row3" style="padding-top:10px">
+  <div class="card"><h3>🎯 Meta vs Real</h3><canvas id="cMeta" height="140"></canvas></div>
+  <div class="card"><h3>📆 Ventas por Día de Semana</h3><canvas id="cDias" height="140"></canvas></div>
+  <div class="card"><h3>📋 Resumen Ejecutivo</h3><div id="resumen" style="font-size:11px;line-height:1.8"></div></div>
+</div>
+</div>
+
+<div class="disc">⚠ Los datos mostrados son de demostración. Los datos reales provienen exclusivamente de las fuentes del cliente. DataVisual SV no garantiza la exactitud de los datos de origen. Las decisiones son responsabilidad exclusiva del cliente. · datavisualsv.com</div>
+<div class="footer">© 2025 DataVisual SV — Demo para El Rincón Familiar · Contáctenos: hola@datavisualsv.com</div>
+
+<script>
+const PER=['Mayo 2025','Abril 2025','Marzo 2025'];
+const D=[
+  {vm:28450,tk:18.5,cl:1538,fc:31.2,can:4.1,meta:27000,
+   vd:[820,750,900,680,950,1250,1380,820,760,880,720,970,1180,1350,840,790,910,740,980,1220,1400,860,810,920,760,990,1190,1360,850,780],
+   pl:{l:["Pupusas","Res Plancha","Pollo Asado","Camarones","Sopa Res","Ensalada"],d:[5840,4920,4100,3750,2980,1860]},
+   hr:{l:["7am","8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm","6pm","7pm","8pm"],d:[120,180,95,60,380,920,1150,820,290,180,420,780,960,820]},
+   fc_p:[{n:"Pupusas Revueltas",p:22,t:"g"},{n:"Ensalada César",p:26,t:"g"},{n:"Sopa de Res",p:28,t:"g"},{n:"Pollo Asado",p:33,t:"w"},{n:"Res a la Plancha",p:36,t:"w"},{n:"Camarones",p:41,t:"r"}],
+   ms:[{n:"María López",v:"$6,840",m:185,pr:"$37.0",rk:"🥇"},{n:"José Martínez",v:"$6,210",m:172,pr:"$36.1",rk:"🥈"},{n:"Ana Pérez",v:"$5,990",m:168,pr:"$35.7",rk:"🥉"},{n:"Luis García",v:"$5,120",m:161,pr:"$31.8",rk:"4°"},{n:"Carlos Rivera",v:"$4,290",m:158,pr:"$27.2",rk:"5°⚠"}]},
+  {vm:26100,tk:17.8,cl:1467,fc:29.8,can:3.8,meta:25000,
+   vd:[750,700,850,630,900,1150,1280,770,710,830,670,920,1100,1260,790,740,860,690,930,1150,1320,810,760,870,710,940,1120,1280,800,730],
+   pl:{l:["Pupusas","Res Plancha","Pollo Asado","Camarones","Sopa Res","Ensalada"],d:[5400,4600,3800,3500,2700,1700]},
+   hr:{l:["7am","8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm","6pm","7pm","8pm"],d:[110,160,85,55,360,870,1080,760,270,160,390,730,900,760]},
+   fc_p:[{n:"Pupusas Revueltas",p:21,t:"g"},{n:"Ensalada César",p:25,t:"g"},{n:"Sopa de Res",p:27,t:"g"},{n:"Pollo Asado",p:31,t:"w"},{n:"Res a la Plancha",p:34,t:"w"},{n:"Camarones",p:38,t:"r"}],
+   ms:[{n:"Ana Pérez",v:"$6,100",m:175,pr:"$34.9",rk:"🥇"},{n:"María López",v:"$6,000",m:180,pr:"$33.3",rk:"🥈"},{n:"José Martínez",v:"$5,800",m:165,pr:"$35.2",rk:"🥉"},{n:"Luis García",v:"$5,000",m:158,pr:"$31.6",rk:"4°"},{n:"Carlos Rivera",v:"$3,200",m:150,pr:"$21.3",rk:"5°⚠"}]},
+  {vm:24800,tk:17.1,cl:1451,fc:30.5,can:5.2,meta:24000,
+   vd:[710,660,800,600,850,1100,1220,730,670,780,630,870,1050,1200,750,700,810,650,880,1090,1260,770,720,820,670,890,1060,1220,760,690],
+   pl:{l:["Pupusas","Res Plancha","Pollo Asado","Camarones","Sopa Res","Ensalada"],d:[5100,4300,3600,3300,2500,1600]},
+   hr:{l:["7am","8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm","6pm","7pm","8pm"],d:[100,150,80,50,340,830,1020,720,250,150,370,690,850,720]},
+   fc_p:[{n:"Pupusas Revueltas",p:23,t:"g"},{n:"Ensalada César",p:27,t:"g"},{n:"Sopa de Res",p:29,t:"w"},{n:"Pollo Asado",p:34,t:"w"},{n:"Res a la Plancha",p:37,t:"w"},{n:"Camarones",p:43,t:"r"}],
+   ms:[{n:"José Martínez",v:"$5,800",m:170,pr:"$34.1",rk:"🥇"},{n:"María López",v:"$5,700",m:175,pr:"$32.6",rk:"🥈"},{n:"Ana Pérez",v:"$5,400",m:162,pr:"$33.3",rk:"🥉"},{n:"Luis García",v:"$4,700",m:155,pr:"$30.3",rk:"4°"},{n:"Carlos Rivera",v:"$3,200",m:148,pr:"$21.6",rk:"5°⚠"}]}
+];
+const cols6=['#1B3A5C','#0E7490','#059669','#E8A020','#DC2626','#7C3AED'];
+let CHS={};
+function mk(id,cfg){if(CHS[id])CHS[id].destroy();CHS[id]=new Chart(document.getElementById(id),cfg);}
+function switchTab(t,el){document.querySelectorAll('.tabcontent').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+t).classList.add('active');el.classList.add('active');render();}
+
+function getSemData(dArr,sem){
+  if(sem==='all')return dArr;
+  const s=parseInt(sem),st=s*7,en=Math.min(st+7,dArr.length);
+  return dArr.slice(st,en);
+}
+
+function render(){
+  const pi=parseInt(document.getElementById('fPer').value);
+  const sem=document.getElementById('fSem').value;
+  const d=D[pi];
+  document.getElementById('perLabel').textContent='📅 '+PER[pi];
+  const vd=getSemData(d.vd,sem);
+  const vdlabels=vd.map((_,i)=>{const base=sem==='all'?0:parseInt(sem)*7;return String(base+i+1);});
+  const vtot=vd.reduce((a,b)=>a+b,0);
+  const pctMeta=((d.vm/d.meta-1)*100).toFixed(1);
+
+  // KPIs
+  document.getElementById('kpiGrid').innerHTML=`
+    <div class="kpi g"><div class="lbl">Ventas del Mes</div><div class="val">$${d.vm.toLocaleString()}</div><div class="dlt up">▲ ${pctMeta}% vs meta</div><div class="sub">Meta $${d.meta.toLocaleString()}</div></div>
+    <div class="kpi t"><div class="lbl">Ticket Promedio</div><div class="val">$${d.tk.toFixed(2)}</div><div class="dlt up">▲ vs mes ant.</div><div class="sub">por persona</div></div>
+    <div class="kpi g"><div class="lbl">Clientes</div><div class="val">${d.cl.toLocaleString()}</div><div class="dlt up">▲ este mes</div><div class="sub">atendidos</div></div>
+    <div class="kpi ${d.fc>30?'r':'g'}"><div class="lbl">Food Cost</div><div class="val">${d.fc}%</div><div class="dlt ${d.fc>30?'dn':'up'}">${d.fc>30?'▲ sobre meta':'✓ bajo meta'}</div><div class="sub">meta &lt; 30%</div></div>
+    <div class="kpi ${d.can>4?'r':'a'}"><div class="lbl">Cancelaciones</div><div class="val">${d.can}%</div><div class="dlt dn">objetivo &lt; 3%</div><div class="sub">de reservas</div></div>
+    <div class="kpi t"><div class="lbl">Semana activa</div><div class="val">$${vtot.toLocaleString()}</div><div class="dlt">${sem==='all'?'Todo el mes':'Semana '+((parseInt(sem)||0)+1)}</div><div class="sub">en selección</div></div>`;
+
+  // Alerta contextual
+  const alerts=[];
+  if(d.fc>30)alerts.push('Food cost '+d.fc+'% sobre meta del 30% — revisar proveedores y precios');
+  if(d.can>4)alerts.push('Tasa de cancelación '+d.can+'% supera objetivo del 3% — considerar política de confirmación');
+  d.fc_p.filter(x=>x.t==='r').forEach(x=>alerts.push(x.n+' con food cost del '+x.p+'% — evaluar precio o proveedor'));
+  document.getElementById('alertBox').innerHTML=alerts.length?'⚠ <strong>Alertas del período:</strong> '+alerts.join(' · '):'✅ Sin alertas críticas este período.';
+  document.getElementById('alertBox').style.background=alerts.length?'#FEF3C7':'#D1FAE5';
+  document.getElementById('alertBox').style.color=alerts.length?'#78350F':'#065F46';
+  document.getElementById('alertBox').style.borderLeftColor=alerts.length?'#F59E0B':'#10B981';
+
+  requestAnimationFrame(()=>{
+    // Ventas diarias
+    if(document.getElementById('cVentas'))
+      mk('cVentas',{type:'bar',data:{labels:vdlabels,datasets:[{label:'Ventas ($)',data:vd,
+        backgroundColor:vd.map(v=>v>=1000?'rgba(5,150,105,.85)':v>=700?'rgba(14,116,144,.75)':'rgba(220,38,38,.65)'),
+        borderRadius:3,borderSkipped:false}]},
+        options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()}}},
+          scales:{y:{ticks:{callback:v=>'$'+v},grid:{color:'#F1F5F9'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+    // Platos
+    if(document.getElementById('cPlatos'))
+      mk('cPlatos',{type:'doughnut',data:{labels:d.pl.l,datasets:[{data:d.pl.d,backgroundColor:cols6,borderWidth:2,borderColor:'#fff'}]},
+        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9},padding:6}},tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()}}}}});
+    // Food trend
+    if(document.getElementById('cFoodTrend'))
+      mk('cFoodTrend',{type:'line',data:{labels:['Dic','Ene','Feb','Mar','Abr','May'],datasets:[
+        {label:'Food Cost %',data:[29.8,30.2,28.9,31.1,29.8,d.fc],borderColor:'#DC2626',backgroundColor:'rgba(220,38,38,.1)',fill:true,tension:.4,pointRadius:4},
+        {label:'Meta 30%',data:[30,30,30,30,30,30],borderColor:'#059669',borderDash:[5,5],borderWidth:1.5,pointRadius:0}]},
+        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}},
+          scales:{y:{min:25,max:35,ticks:{callback:v=>v+'%'},grid:{color:'#F1F5F9'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+    // Costos
+    if(document.getElementById('cCostos'))
+      mk('cCostos',{type:'pie',data:{labels:['Ingredientes','Nómina','Renta','Servicios','Otros'],
+        datasets:[{data:[31,28,18,12,11],backgroundColor:['#DC2626','#1B3A5C','#E8A020','#0E7490','#94A3B8'],borderWidth:2,borderColor:'#fff'}]},
+        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9},padding:6}}}}});
+    // Horas
+    if(document.getElementById('cHoras'))
+      mk('cHoras',{type:'bar',data:{labels:d.hr.l,datasets:[{label:'Ventas ($)',data:d.hr.d,
+        backgroundColor:'rgba(14,116,144,.75)',borderRadius:3}]},
+        options:{responsive:true,plugins:{legend:{display:false}},
+          scales:{y:{ticks:{callback:v=>'$'+v},grid:{color:'#F1F5F9'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+    // Comparativo
+    if(document.getElementById('cComp'))
+      mk('cComp',{type:'bar',data:{labels:PER.slice().reverse(),datasets:[
+        {label:'Ventas',data:[D[2].vm,D[1].vm,D[0].vm],backgroundColor:['rgba(14,116,144,.6)','rgba(14,116,144,.75)','rgba(14,116,144,.95)'],borderRadius:4},
+        {label:'Meta',data:[D[2].meta,D[1].meta,D[0].meta],backgroundColor:'rgba(220,38,38,.15)',borderWidth:1.5,borderColor:'#DC2626',type:'bar',borderRadius:4}]},
+        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}},
+          scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#F1F5F9'}}}}});
+    // Meta gauge bar
+    if(document.getElementById('cMeta'))
+      mk('cMeta',{type:'bar',data:{labels:['Real','Meta'],datasets:[{data:[d.vm,d.meta],
+        backgroundColor:['rgba(5,150,105,.85)','rgba(220,38,38,.2)'],borderRadius:6}]},
+        options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},
+          scales:{x:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#F1F5F9'}},y:{grid:{display:false}}}}});
+    // Por día de semana
+    if(document.getElementById('cDias'))
+      mk('cDias',{type:'bar',data:{labels:['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],
+        datasets:[{data:[820,790,850,780,1100,1380,1200],backgroundColor:['rgba(14,116,144,.7)','rgba(14,116,144,.7)','rgba(14,116,144,.7)','rgba(14,116,144,.7)','rgba(232,160,32,.85)','rgba(5,150,105,.9)','rgba(5,150,105,.8)'],borderRadius:4}]},
+        options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{ticks:{callback:v=>'$'+v},grid:{color:'#F1F5F9'}}}}});
+  });
+
+  // Meseros
+  if(document.getElementById('tMeseros'))
+    document.getElementById('tMeseros').innerHTML=`<thead><tr><th>Rk</th><th>Mesero</th><th>Ventas</th><th>Mesas</th><th>Prom.</th></tr></thead><tbody>`+
+      d.ms.map(m=>`<tr><td>${m.rk}</td><td>${m.n}</td><td style="font-weight:700;color:#0E7490">${m.v}</td><td>${m.m}</td><td>${m.pr}</td></tr>`).join('')+'</tbody>';
+
+  // Food cost list
+  if(document.getElementById('foodCostList'))
+    document.getElementById('foodCostList').innerHTML=d.fc_p.map(f=>`
+      <div class="food-item">
+        <div class="fn">${f.n}</div>
+        <div class="fb"><div class="ff" style="width:${f.p/50*100}%;background:${f.t==='r'?'#DC2626':f.t==='w'?'#D97706':'#059669'}"></div></div>
+        <div class="fp" style="color:${f.t==='r'?'#DC2626':f.t==='w'?'#D97706':'#059669'}">${f.p}%</div>
+      </div>`).join('');
+
+  // Resumen ejecutivo
+  if(document.getElementById('resumen'))
+    document.getElementById('resumen').innerHTML=`
+      <b>Período:</b> ${PER[pi]}<br>
+      <b>Ventas:</b> $${d.vm.toLocaleString()} (${pctMeta>0?'+':''}${pctMeta}% vs meta)<br>
+      <b>Ticket prom.:</b> $${d.tk.toFixed(2)}<br>
+      <b>Clientes:</b> ${d.cl.toLocaleString()}<br>
+      <b>Food cost:</b> ${d.fc}% ${d.fc>30?'⚠ sobre meta':'✅ bajo meta'}<br>
+      <b>Cancelaciones:</b> ${d.can}% ${d.can>4?'⚠ alto':'✅ normal'}<br>
+      <b>Plato estrella:</b> ${d.pl.l[0]}<br>
+      <b>Mesero top:</b> ${d.ms[0].n}<br>
+      <b>Hora pico:</b> 1pm ($${Math.max(...d.hr.d).toLocaleString()})`;
+}
+render();
+</script>
+</body>
+</html>
