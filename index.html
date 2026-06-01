@@ -2,258 +2,1108 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DataVisual SV — Demo Restaurante v2</title>
+<title>DataVisual SV — Demo Restaurante · Selector de Paquete</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@500&family=Syne:wght@600;700;800&family=Raleway:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:#F8FAFC;color:#1E293B;font-size:13px}
-:root{--nav:#1B3A5C;--acc:#E8A020;--teal:#0E7490;--g:#059669;--r:#DC2626;--card:#fff;--b:#E2E8F0}
-.topbar{background:var(--nav);padding:8px 20px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.topbar h1{color:#fff;font-size:15px;font-weight:700;flex:1;text-align:center}
-.topbar .brand{color:rgba(255,255,255,.5);font-size:11px;letter-spacing:1px;white-space:nowrap}
-.topbar .badge{background:var(--acc);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
-.sbar{background:linear-gradient(135deg,#0E7490,#1B3A5C);padding:9px 20px;display:flex;align-items:center;gap:10px}
-.sbar .si h2{color:#fff;font-size:13px;font-weight:700}.sbar .si p{color:#BAE6FD;font-size:11px}
-.sbar .per{margin-left:auto;background:rgba(255,255,255,.15);border-radius:6px;padding:4px 10px;color:#fff;font-size:11px;font-weight:600}
-.fbar{background:#fff;padding:8px 20px;border-bottom:1px solid var(--b);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.fbar label{font-size:11px;font-weight:600;color:#64748B}
-.fbar select{border:1px solid var(--b);border-radius:5px;padding:4px 8px;font-size:11px;cursor:pointer;color:#1E293B}
-.wm{margin-left:auto;font-size:10px;color:#CBD5E1;font-weight:700;letter-spacing:1px}
-.kgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:12px 20px}
-.kpi{background:#fff;border-radius:10px;padding:11px 13px;border:1px solid var(--b);border-left:4px solid #94A3B8}
-.kpi.g{border-left-color:var(--g)}.kpi.r{border-left-color:var(--r)}.kpi.t{border-left-color:var(--teal)}.kpi.a{border-left-color:var(--acc)}
-.kpi .lbl{font-size:9px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px}
-.kpi .val{font-size:19px;font-weight:800;color:#0F172A;margin:3px 0 2px}
-.kpi .dlt{font-size:10px;font-weight:600}.up{color:var(--g)}.dn{color:var(--r)}
-.kpi .sub{font-size:9px;color:#94A3B8}
-.row2{display:grid;grid-template-columns:2fr 1fr;gap:10px;padding:0 20px 10px}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 20px 16px}
-.card{background:#fff;border-radius:10px;border:1px solid var(--b);padding:13px}
-.card h3{font-size:12px;font-weight:700;color:#0F172A;margin-bottom:10px;display:flex;align-items:center;gap:5px}
-.card h3 .tag{background:#EFF6FF;color:var(--teal);font-size:9px;padding:1px 6px;border-radius:20px;font-weight:600}
-.food-item{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #F8FAFC;font-size:11px}
-.food-item:last-child{border:none}
-.fn{width:110px;font-weight:600;color:#334155;font-size:10px}
-.fb{flex:1;background:#F1F5F9;border-radius:3px;height:8px;overflow:hidden}
-.ff{height:100%;border-radius:3px}
-.fp{width:35px;text-align:right;font-weight:700;font-size:10px}
-.tbl{width:100%;border-collapse:collapse;font-size:10px}
-.tbl th{background:#F8FAFC;color:#64748B;font-weight:700;padding:5px 7px;text-align:left;border-bottom:2px solid var(--b);text-transform:uppercase;font-size:9px}
-.tbl td{padding:5px 7px;border-bottom:1px solid #F8FAFC;color:#374151}
-.tbl tr:hover td{background:#F8FAFC}
-.alert{background:#FEF3C7;border-left:3px solid #F59E0B;padding:8px 20px;font-size:11px;color:#78350F;margin-bottom:2px}
-.disc{background:#F1F5F9;padding:5px 20px;font-size:9px;color:#94A3B8;text-align:center;border-top:1px solid var(--b)}
-.footer{background:var(--nav);text-align:center;padding:6px;color:rgba(255,255,255,.35);font-size:9px;letter-spacing:.5px}
+body{font-family:'DM Sans',sans-serif;background:#F0F4F8;color:#1A2535;font-size:13px;min-height:100vh}
+
+/* ════════════════════════════════════
+   SELECTOR BAR (siempre visible arriba)
+════════════════════════════════════ */
+.pkg-bar{
+  background:#07101E;
+  display:flex;align-items:stretch;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  position:sticky;top:0;z-index:200;
+}
+.pkg-bar-label{
+  display:flex;align-items:center;padding:0 20px;
+  font-family:'DM Mono',monospace;font-size:9px;font-weight:500;
+  color:rgba(255,255,255,.25);letter-spacing:2.5px;white-space:nowrap;
+  border-right:1px solid rgba(255,255,255,.06);
+}
+.pkg-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:10px 6px;cursor:pointer;border:none;background:transparent;
+  border-right:1px solid rgba(255,255,255,.06);
+  transition:background .2s;position:relative;
+  gap:2px;
+}
+.pkg-btn:last-child{border-right:none}
+.pkg-btn:hover{background:rgba(255,255,255,.05)}
+.pkg-btn-name{font-size:11px;font-weight:800;letter-spacing:.5px;transition:color .2s}
+.pkg-btn-desc{font-size:9px;font-weight:400;opacity:.45;letter-spacing:.3px}
+.pkg-btn-price{font-family:'DM Mono',monospace;font-size:10px;font-weight:600;transition:color .2s}
+.pkg-btn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;transition:background .2s}
+
+/* Starter active */
+.pkg-btn.sel-s .pkg-btn-name{color:#F4A623}
+.pkg-btn.sel-s .pkg-btn-price{color:#F4A623}
+.pkg-btn.sel-s{background:rgba(244,166,35,.07)}
+.pkg-btn.sel-s::after{background:#F4A623}
+/* Growth active */
+.pkg-btn.sel-g .pkg-btn-name{color:#2ECC71}
+.pkg-btn.sel-g .pkg-btn-price{color:#2ECC71}
+.pkg-btn.sel-g{background:rgba(46,204,113,.07)}
+.pkg-btn.sel-g::after{background:#2ECC71}
+/* Pro active */
+.pkg-btn.sel-p .pkg-btn-name{color:#C39BD3}
+.pkg-btn.sel-p .pkg-btn-price{color:#C39BD3}
+.pkg-btn.sel-p{background:rgba(155,89,182,.07)}
+.pkg-btn.sel-p::after{background:#9B59B6}
+
+.pkg-btn-name,.pkg-btn-price,.pkg-btn-desc{color:rgba(255,255,255,.35)}
+.pkg-btn.sel-s .pkg-btn-desc,.pkg-btn.sel-g .pkg-btn-desc,.pkg-btn.sel-p .pkg-btn-desc{opacity:.55}
+
+/* ════════════════════════════════════
+   ROOT — fades on switch
+════════════════════════════════════ */
+#root{transition:opacity .2s ease}
+#root.fading{opacity:0;pointer-events:none}
+
+/* ════════════════════════════════════
+   SHARED LAYOUT
+════════════════════════════════════ */
+.topbar{display:flex;align-items:center;padding:0 24px;height:54px;border-bottom:4px solid var(--acc)}
+.brand{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:rgba(255,255,255,.3);letter-spacing:2px}
+.top-title{flex:1;text-align:center;font-size:15px;font-weight:800;color:#fff}
+.pkg-badge{font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:3px;white-space:nowrap}
+
+.subbar{padding:10px 24px 13px;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06)}
+.subbar-info h2{font-size:14px;font-weight:800;color:#fff;margin-bottom:3px}
+.subbar-info p{font-size:11px;color:rgba(255,255,255,.4)}
+.subbar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.src-chip{font-size:9px;font-weight:700;padding:3px 10px;border-radius:3px;font-family:'DM Mono',monospace}
+.per-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:600;padding:5px 14px;border-radius:3px}
+
+.filters{background:#fff;border-bottom:1px solid #E2E8F0;padding:9px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.f-lbl{font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.filters select{border:1px solid #E2E8F0;border-radius:5px;padding:5px 10px;font-size:11px;color:#1A2535;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer;transition:.15s}
+.filters select:focus{border-color:var(--acc)}
+.f-sep{width:1px;height:18px;background:#E2E8F0;flex-shrink:0}
+.f-space{flex:1}
+.f-wm{color:#CBD5E1;font-size:9px;font-weight:700;letter-spacing:2px;font-family:'DM Mono',monospace}
+
+/* alert bar */
+.alert-bar{margin:14px 24px 0;border-radius:6px;padding:9px 14px;font-size:11px;font-weight:600;border-left:4px solid;line-height:1.5}
+.alert-bar.ok{background:#E8FBF3;border-color:#1DAF72;color:#0D5E37}
+.alert-bar.warn{background:#FFF7E6;border-color:#E8860A;color:#7A4B00}
+.alert-bar.crit{background:#FEE8E8;border-color:#E74C3C;color:#7F1D1D}
+
+/* cards */
+.card{background:#fff;border-radius:8px;border:1px solid #E2E8F0;padding:16px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-size:12px;font-weight:700;color:#0F172A;display:flex;align-items:center;gap:6px}
+.card-tag{font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px}
+.exp-btn{background:#F1F5F9;border:1px solid #E2E8F0;border-radius:4px;padding:3px 8px;font-size:9px;font-weight:700;cursor:pointer;color:#64748B;font-family:'DM Sans',sans-serif;transition:.15s}
+.exp-btn:hover{background:#fff;color:#0F172A;border-color:var(--acc)}
+
 /* tabs */
-.tabs{display:flex;gap:2px;padding:8px 20px 0;border-bottom:1px solid var(--b);background:#fff}
-.tab{padding:6px 14px;font-size:11px;font-weight:600;color:#64748B;cursor:pointer;border-bottom:2px solid transparent;transition:.2s}
-.tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+.tabs{display:flex;background:#fff;border-bottom:2px solid #E2E8F0;padding:0 24px;overflow-x:auto}
+.tab{padding:10px 18px;font-size:12px;font-weight:700;color:#64748B;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tab.active{border-bottom-color:var(--acc);color:var(--acc)}
+.tab:hover:not(.active){background:#F8FAFC}
 .tabcontent{display:none}.tabcontent.active{display:block}
+.tab-pill{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:#F1F5F9;color:#64748B;font-family:'DM Mono',monospace}
+.tab.active .tab-pill{background:var(--acc-light);color:var(--acc)}
+
+/* layouts */
+.g2{display:grid;grid-template-columns:2fr 1fr;gap:12px;padding:0 24px 12px}
+.g21{display:grid;grid-template-columns:3fr 2fr;gap:12px;padding:0 24px 12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:0 24px 12px}
+.g31{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;padding:0 24px 12px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;padding:0 24px 12px}
+.gfull{padding:0 24px 12px}
+
+/* kpi grids */
+.kpi-grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:14px 24px}
+.kpi-grid-10{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:14px 24px}
+.kpi-grid-free{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;padding:14px 24px}
+
+/* kpi card base */
+.kpi{background:#fff;border-radius:8px;border:1px solid #E2E8F0;padding:13px 15px;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s;cursor:default}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:3px}
+.kpi-lbl{font-size:9px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px}
+.kpi-val{font-size:21px;font-weight:800;color:#0F172A;line-height:1;margin-bottom:3px}
+.kpi-delta{font-size:10px;font-weight:700}
+.up{color:#1DAF72}.dn{color:#E74C3C}.neutral{color:#64748B}
+.kpi-sub{font-size:9px;color:#94A3B8;margin-top:2px}
+/* rag dot on kpi */
+.kpi-rag{position:absolute;top:12px;right:12px;width:9px;height:9px;border-radius:50%}
+.kpi-rag.g{background:#1DAF72;box-shadow:0 0 7px rgba(29,175,114,.6)}
+.kpi-rag.a{background:#F39C12;box-shadow:0 0 7px rgba(243,156,18,.6)}
+.kpi-rag.r{background:#E74C3C;box-shadow:0 0 7px rgba(231,76,60,.6)}
+/* threshold label (growth) */
+.kpi-thresh{position:absolute;bottom:10px;right:10px;font-size:8px;font-weight:700;padding:2px 6px;border-radius:10px;font-family:'DM Mono',monospace}
+.kpi-thresh.g{background:#E8FBF3;color:#1DAF72}
+.kpi-thresh.r{background:#FDE8E8;color:#E74C3C}
+.kpi-thresh.a{background:#FFF3D6;color:#E8860A}
+
+/* table */
+.tbl-srch{display:flex;gap:8px;margin-bottom:10px}
+.tbl-srch input{border:1px solid #E2E8F0;border-radius:5px;padding:6px 10px;font-size:11px;font-family:'DM Sans',sans-serif;outline:none;flex:1}
+.tbl-srch input:focus{border-color:var(--acc)}
+.tbl{width:100%;border-collapse:collapse;font-size:11px}
+.tbl thead th{background:#F8FAFC;color:#64748B;font-weight:700;padding:7px 10px;text-align:left;border-bottom:2px solid #E2E8F0;font-size:9px;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+.tbl thead th:hover{color:#0F172A}
+.tbl td{padding:7px 10px;border-bottom:1px solid #F8FAFC;color:#374151}
+.tbl tr:hover td{background:#F8FAFC}
+.badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px}
+.badge-g{background:#D1FAE5;color:#065F46}
+.badge-r{background:#FEE2E2;color:#991B1B}
+.badge-a{background:#FEF3C7;color:#92400E}
+.pg-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid #E2E8F0}
+.pg-btn{border:1px solid #E2E8F0;background:#fff;border-radius:4px;padding:4px 10px;font-size:10px;cursor:pointer;font-family:'DM Sans',sans-serif;color:#64748B}
+.pg-btn:hover{background:#F8FAFC}
+
+/* food cost bar */
+.fc-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #F8FAFC}
+.fc-item:last-child{border:none}
+.fc-name{width:130px;font-weight:600;color:#334155;font-size:10px}
+.fc-bar{flex:1;background:#F1F5F9;border-radius:4px;height:8px;overflow:hidden}
+.fc-fill{height:100%;border-radius:4px}
+.fc-pct{width:38px;text-align:right;font-weight:700;font-size:10px;font-family:'DM Mono',monospace}
+
+/* RAG strip (pro) */
+.rag-strip{display:flex;margin:14px 24px 0;border-radius:6px;overflow:hidden;border:1px solid #E2E8F0}
+.rag-cell{flex:1;padding:7px 12px;font-size:10px;font-weight:700;display:flex;align-items:center;gap:6px;border-right:1px solid #E2E8F0}
+.rag-cell:last-child{border-right:none}
+.rag-cell.r{background:#FFF1F2;color:#E74C3C}
+.rag-cell.a{background:#FFFBEB;color:#F39C12}
+.rag-cell.g{background:#F0FFF8;color:#1DAF72}
+.rag-dot{width:8px;height:8px;border-radius:50%}
+.rag-dot.r{background:#E74C3C}.rag-dot.a{background:#F39C12}.rag-dot.g{background:#1DAF72}
+
+/* exec hero (pro) */
+.exec-hero{border-radius:8px;padding:20px 24px;display:flex;align-items:center;gap:28px;margin:14px 24px 0}
+.exec-hero h2{font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px}
+.exec-hero .big{font-family:'Raleway',sans-serif;font-size:36px;font-weight:900;color:#fff;line-height:1}
+.exec-hero .sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:5px}
+.exec-stats{display:flex;gap:22px;flex-shrink:0}
+.estat .ev{font-family:'Raleway',sans-serif;font-size:22px;font-weight:900;color:var(--acc)}
+.estat .el{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* rag summary cards (pro) */
+.rag-summary{display:flex;gap:8px;flex-wrap:wrap;margin:10px 24px 0}
+.rag-item{background:#fff;border-radius:6px;border:1px solid #E2E8F0;padding:10px 14px;flex:1;min-width:140px}
+.rag-item .ri-l{font-size:9px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:700}
+.rag-item .ri-v{font-size:17px;font-weight:900;color:#0F172A;font-family:'DM Mono',monospace;line-height:1.1}
+.rag-item .ri-s{font-size:10px;font-weight:700;margin-top:4px;display:flex;align-items:center;gap:4px}
+
+/* heatmap */
+.hm-wrap{display:grid;grid-template-columns:auto repeat(7,1fr);gap:2px;font-size:9px}
+.hm-hdr{display:flex;align-items:center;justify-content:center;font-weight:700;color:#64748B;padding-bottom:3px;font-size:9px}
+.hm-lbl{display:flex;align-items:center;justify-content:flex-end;padding-right:6px;color:#94A3B8;font-weight:600;font-size:9px}
+.hm-cell{border-radius:3px;height:26px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:rgba(0,0,0,.45);cursor:default;transition:.2s;font-family:'DM Mono',monospace}
+.hm-cell:hover{transform:scale(1.1);z-index:10;position:relative}
+
+/* proj note */
+.proj-note{font-size:9px;color:#94A3B8;font-style:italic;margin-top:6px;padding:0 24px}
+
+/* footer */
+.disclaimer{background:#fff;border-top:1px solid #E2E8F0;padding:6px 24px;font-size:9px;color:#94A3B8;text-align:center;margin-top:6px}
+.footer{text-align:center;padding:8px;color:rgba(255,255,255,.25);font-size:9px;letter-spacing:.5px;font-family:'DM Mono',monospace}
+
+/* pkg float badge */
+.pkg-float{position:fixed;bottom:20px;right:20px;font-size:10px;font-weight:800;padding:6px 16px;border-radius:4px;font-family:'DM Mono',monospace;z-index:300;letter-spacing:.5px;cursor:default;transition:all .3s}
+
+/* ════════════════════════════════════
+   VISUAL DIFFERENTIATION MARKERS
+   Starter: minimal, clean, no tabs
+   Growth: structured, badge-heavy
+   Pro: dark hero, full luxury
+════════════════════════════════════ */
+/* Starter: subtle border-left on kpi */
+.starter-kpi-stripe{border-left:4px solid var(--acc)}
+/* Growth: bottom color bar on kpi */
+.growth-kpi .kpi-accent{bottom:0;top:auto}
+/* Pro: full left glow on kpi + dark accent */
+.pro-kpi{background:#FAFBFF;border:1px solid #DDE4F0}
+
+/* Locked overlay for starter (shows what Growth/Pro add) */
+.locked-hint{
+  background:#F8FAFC;border:2px dashed #D1D5DB;border-radius:8px;
+  padding:20px;text-align:center;color:#94A3B8;font-size:11px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.locked-hint .lk-icon{font-size:24px}
+.locked-hint .lk-title{font-size:12px;font-weight:700;color:#64748B}
+.locked-hint .lk-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px}
 </style>
 </head>
 <body>
-<div class="topbar">
-  <div class="brand">DATAVISUAL SV</div>
-  <h1>🍽️ Dashboard Restaurante — Demo Interactiva</h1>
-  <div class="badge">DEMO v2</div>
-</div>
-<div class="sbar">
-  <div class="si"><h2>El Rincón Familiar, S.A.</h2><p>Restaurante · San Salvador · Actualizado automáticamente</p></div>
-  <div class="per" id="perLabel">📅 Mayo 2025</div>
-</div>
-<div class="fbar">
-  <label>Período:</label>
-  <select id="fPer" onchange="render()"><option value="0">Mayo 2025</option><option value="1">Abril 2025</option><option value="2">Marzo 2025</option></select>
-  <label>Semana:</label>
-  <select id="fSem" onchange="render()"><option value="all">Todo el mes</option><option value="0">Semana 1</option><option value="1">Semana 2</option><option value="2">Semana 3</option><option value="3">Semana 4</option></select>
-  <div class="wm">DEMO · datavisualsv.com</div>
-</div>
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('ventas',this)">📈 Ventas</div>
-  <div class="tab" onclick="switchTab('costos',this)">🥩 Food Cost</div>
-  <div class="tab" onclick="switchTab('equipo',this)">🧑‍🍳 Equipo</div>
-  <div class="tab" onclick="switchTab('kpis',this)">📊 KPIs</div>
+
+<!-- ═══ PKG SELECTOR ═══ -->
+<div class="pkg-bar">
+  <div class="pkg-bar-label">VER DEMO:</div>
+  <button class="pkg-btn sel-s" id="btn-s" onclick="setPkg('s',this)">
+    <div class="pkg-btn-name">01 STARTER</div>
+    <div class="pkg-btn-price">$99 pago único</div>
+    <div class="pkg-btn-desc">1 fuente · 5 KPIs · 3 gráficas</div>
+  </button>
+  <button class="pkg-btn" id="btn-g" onclick="setPkg('g',this)">
+    <div class="pkg-btn-name">02 GROWTH</div>
+    <div class="pkg-btn-price">$199 pago único</div>
+    <div class="pkg-btn-desc">2 fuentes · 10 KPIs · 6 gráficas · tabla</div>
+  </button>
+  <button class="pkg-btn" id="btn-p" onclick="setPkg('p',this)">
+    <div class="pkg-btn-name">03 PRO</div>
+    <div class="pkg-btn-price">$299 pago único</div>
+    <div class="pkg-btn-desc">3 fuentes · KPIs ilimitados · RAG · exportar</div>
+  </button>
 </div>
 
-<div id="tab-ventas" class="tabcontent active">
-<div class="kgrid" id="kpiGrid"></div>
-<div class="alert" id="alertBox"></div>
-<div class="row2">
-  <div class="card"><h3>📈 Ventas Diarias <span class="tag">por día del mes</span></h3><canvas id="cVentas" height="90"></canvas></div>
-  <div class="card"><h3>🍕 Ventas por Plato <span class="tag">Top 6</span></h3><canvas id="cPlatos" height="160"></canvas></div>
-</div>
-</div>
-
-<div id="tab-costos" class="tabcontent">
-<div style="padding:12px 20px 0">
-  <div class="card"><h3>🥩 Food Cost por Plato <span class="tag">meta &lt; 30% · verde=bien · rojo=problema</span></h3><div id="foodCostList" style="columns:2;gap:20px;padding-top:4px"></div></div>
-</div>
-<div class="row2" style="padding-top:10px">
-  <div class="card"><h3>📊 Tendencia Food Cost <span class="tag">últimos 6 meses</span></h3><canvas id="cFoodTrend" height="100"></canvas></div>
-  <div class="card"><h3>💰 Estructura de Costos <span class="tag">mayo</span></h3><canvas id="cCostos" height="160"></canvas></div>
-</div>
-</div>
-
-<div id="tab-equipo" class="tabcontent">
-<div class="row2" style="padding-top:12px">
-  <div class="card"><h3>🏆 Ranking Meseros <span class="tag">ventas del mes</span></h3><table class="tbl" id="tMeseros"></table></div>
-  <div class="card"><h3>⏰ Ventas por Hora <span class="tag">promedio diario</span></h3><canvas id="cHoras" height="160"></canvas></div>
-</div>
-</div>
-
-<div id="tab-kpis" class="tabcontent">
-<div style="padding:12px 20px 0">
-  <div class="card"><h3>📅 Comparativo Mensual <span class="tag">3 meses</span></h3><canvas id="cComp" height="80"></canvas></div>
-</div>
-<div class="row3" style="padding-top:10px">
-  <div class="card"><h3>🎯 Meta vs Real</h3><canvas id="cMeta" height="140"></canvas></div>
-  <div class="card"><h3>📆 Ventas por Día de Semana</h3><canvas id="cDias" height="140"></canvas></div>
-  <div class="card"><h3>📋 Resumen Ejecutivo</h3><div id="resumen" style="font-size:11px;line-height:1.8"></div></div>
-</div>
-</div>
-
-<div class="disc">⚠ Los datos mostrados son de demostración. Los datos reales provienen exclusivamente de las fuentes del cliente. DataVisual SV no garantiza la exactitud de los datos de origen. Las decisiones son responsabilidad exclusiva del cliente. · datavisualsv.com</div>
-<div class="footer">© 2025 DataVisual SV — Demo para El Rincón Familiar · Contáctenos: hola@datavisualsv.com</div>
+<!-- ═══ DASHBOARD ROOT ═══ -->
+<div id="root"></div>
 
 <script>
+/* ──────────────────────────────────────
+   DATA
+────────────────────────────────────── */
 const PER=['Mayo 2025','Abril 2025','Marzo 2025'];
 const D=[
-  {vm:28450,tk:18.5,cl:1538,fc:31.2,can:4.1,meta:27000,
+  {vm:28450,tk:18.5,cl:1538,fc:31.2,can:4.1,meta:27000,margen:28.8,gastos:20320,
    vd:[820,750,900,680,950,1250,1380,820,760,880,720,970,1180,1350,840,790,910,740,980,1220,1400,860,810,920,760,990,1190,1360,850,780],
    pl:{l:["Pupusas","Res Plancha","Pollo Asado","Camarones","Sopa Res","Ensalada"],d:[5840,4920,4100,3750,2980,1860]},
-   hr:{l:["7am","8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm","6pm","7pm","8pm"],d:[120,180,95,60,380,920,1150,820,290,180,420,780,960,820]},
+   hr:{l:["7am","9am","11am","1pm","3pm","5pm","7pm"],d:[180,95,380,1150,290,420,960]},
    fc_p:[{n:"Pupusas Revueltas",p:22,t:"g"},{n:"Ensalada César",p:26,t:"g"},{n:"Sopa de Res",p:28,t:"g"},{n:"Pollo Asado",p:33,t:"w"},{n:"Res a la Plancha",p:36,t:"w"},{n:"Camarones",p:41,t:"r"}],
-   ms:[{n:"María López",v:"$6,840",m:185,pr:"$37.0",rk:"🥇"},{n:"José Martínez",v:"$6,210",m:172,pr:"$36.1",rk:"🥈"},{n:"Ana Pérez",v:"$5,990",m:168,pr:"$35.7",rk:"🥉"},{n:"Luis García",v:"$5,120",m:161,pr:"$31.8",rk:"4°"},{n:"Carlos Rivera",v:"$4,290",m:158,pr:"$27.2",rk:"5°⚠"}]},
-  {vm:26100,tk:17.8,cl:1467,fc:29.8,can:3.8,meta:25000,
+   ms:[{n:"María López",v:6840,m:185,pr:37.0},{n:"José Martínez",v:6210,m:172,pr:36.1},{n:"Ana Pérez",v:5990,m:168,pr:35.7},{n:"Luis García",v:5120,m:161,pr:31.8},{n:"Carlos Rivera",v:4290,m:158,pr:27.2}],
+   inv:[{p:"Carne de Res",s:45,min:30,cu:8.5,t:"g"},{p:"Camarones",s:12,min:20,cu:15.2,t:"r"},{p:"Pollo",s:38,min:25,cu:4.8,t:"g"},{p:"Masa de Maíz",s:80,min:50,cu:1.2,t:"g"},{p:"Lácteos Mix",s:22,min:25,cu:6.3,t:"a"},{p:"Verduras",s:15,min:10,cu:2.1,t:"g"}]},
+  {vm:26100,tk:17.8,cl:1467,fc:29.8,can:3.8,meta:25000,margen:30.2,gastos:18270,
    vd:[750,700,850,630,900,1150,1280,770,710,830,670,920,1100,1260,790,740,860,690,930,1150,1320,810,760,870,710,940,1120,1280,800,730],
    pl:{l:["Pupusas","Res Plancha","Pollo Asado","Camarones","Sopa Res","Ensalada"],d:[5400,4600,3800,3500,2700,1700]},
-   hr:{l:["7am","8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm","6pm","7pm","8pm"],d:[110,160,85,55,360,870,1080,760,270,160,390,730,900,760]},
+   hr:{l:["7am","9am","11am","1pm","3pm","5pm","7pm"],d:[160,85,360,1080,270,390,900]},
    fc_p:[{n:"Pupusas Revueltas",p:21,t:"g"},{n:"Ensalada César",p:25,t:"g"},{n:"Sopa de Res",p:27,t:"g"},{n:"Pollo Asado",p:31,t:"w"},{n:"Res a la Plancha",p:34,t:"w"},{n:"Camarones",p:38,t:"r"}],
-   ms:[{n:"Ana Pérez",v:"$6,100",m:175,pr:"$34.9",rk:"🥇"},{n:"María López",v:"$6,000",m:180,pr:"$33.3",rk:"🥈"},{n:"José Martínez",v:"$5,800",m:165,pr:"$35.2",rk:"🥉"},{n:"Luis García",v:"$5,000",m:158,pr:"$31.6",rk:"4°"},{n:"Carlos Rivera",v:"$3,200",m:150,pr:"$21.3",rk:"5°⚠"}]},
-  {vm:24800,tk:17.1,cl:1451,fc:30.5,can:5.2,meta:24000,
+   ms:[{n:"Ana Pérez",v:6100,m:175,pr:34.9},{n:"María López",v:6000,m:180,pr:33.3},{n:"José Martínez",v:5800,m:165,pr:35.2},{n:"Luis García",v:5000,m:158,pr:31.6},{n:"Carlos Rivera",v:3200,m:150,pr:21.3}],
+   inv:[{p:"Carne de Res",s:50,min:30,cu:8.5,t:"g"},{p:"Camarones",s:25,min:20,cu:15.2,t:"g"},{p:"Pollo",s:40,min:25,cu:4.8,t:"g"},{p:"Masa de Maíz",s:70,min:50,cu:1.2,t:"g"},{p:"Lácteos Mix",s:28,min:25,cu:6.3,t:"g"},{p:"Verduras",s:18,min:10,cu:2.1,t:"g"}]},
+  {vm:24800,tk:17.1,cl:1451,fc:30.5,can:5.2,meta:24000,margen:27.5,gastos:17984,
    vd:[710,660,800,600,850,1100,1220,730,670,780,630,870,1050,1200,750,700,810,650,880,1090,1260,770,720,820,670,890,1060,1220,760,690],
    pl:{l:["Pupusas","Res Plancha","Pollo Asado","Camarones","Sopa Res","Ensalada"],d:[5100,4300,3600,3300,2500,1600]},
-   hr:{l:["7am","8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm","6pm","7pm","8pm"],d:[100,150,80,50,340,830,1020,720,250,150,370,690,850,720]},
+   hr:{l:["7am","9am","11am","1pm","3pm","5pm","7pm"],d:[150,80,340,1020,250,370,850]},
    fc_p:[{n:"Pupusas Revueltas",p:23,t:"g"},{n:"Ensalada César",p:27,t:"g"},{n:"Sopa de Res",p:29,t:"w"},{n:"Pollo Asado",p:34,t:"w"},{n:"Res a la Plancha",p:37,t:"w"},{n:"Camarones",p:43,t:"r"}],
-   ms:[{n:"José Martínez",v:"$5,800",m:170,pr:"$34.1",rk:"🥇"},{n:"María López",v:"$5,700",m:175,pr:"$32.6",rk:"🥈"},{n:"Ana Pérez",v:"$5,400",m:162,pr:"$33.3",rk:"🥉"},{n:"Luis García",v:"$4,700",m:155,pr:"$30.3",rk:"4°"},{n:"Carlos Rivera",v:"$3,200",m:148,pr:"$21.6",rk:"5°⚠"}]}
+   ms:[{n:"José Martínez",v:5800,m:170,pr:34.1},{n:"María López",v:5700,m:175,pr:32.6},{n:"Ana Pérez",v:5400,m:162,pr:33.3},{n:"Luis García",v:4700,m:155,pr:30.3},{n:"Carlos Rivera",v:3200,m:148,pr:21.6}],
+   inv:[{p:"Carne de Res",s:35,min:30,cu:8.3,t:"g"},{p:"Camarones",s:10,min:20,cu:14.9,t:"r"},{p:"Pollo",s:30,min:25,cu:4.7,t:"g"},{p:"Masa de Maíz",s:55,min:50,cu:1.2,t:"g"},{p:"Lácteos Mix",s:20,min:25,cu:6.1,t:"a"},{p:"Verduras",s:8,min:10,cu:2.0,t:"r"}]}
 ];
-const cols6=['#1B3A5C','#0E7490','#059669','#E8A020','#DC2626','#7C3AED'];
-let CHS={};
-function mk(id,cfg){if(CHS[id])CHS[id].destroy();CHS[id]=new Chart(document.getElementById(id),cfg);}
-function switchTab(t,el){document.querySelectorAll('.tabcontent').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+t).classList.add('active');el.classList.add('active');render();}
+const ANT=[24200,22800,23100];
+const COLS6=['#0F2C4A','#1A8FA5','#1DAF72','#F4A623','#E74C3C','#7C3AED'];
+const TRENDS={
+  '2025':[22000,23500,24800,26100,28450],
+  '2024':[19800,21200,22500,23400,24200],
+  meses:['Ene','Feb','Mar','Abr','May']
+};
 
-function getSemData(dArr,sem){
-  if(sem==='all')return dArr;
-  const s=parseInt(sem),st=s*7,en=Math.min(st+7,dArr.length);
-  return dArr.slice(st,en);
+let CHS={},curPkg='s',curPer=0,curSem='all';
+
+function mk(id,cfg){
+  if(CHS[id])CHS[id].destroy();
+  const el=document.getElementById(id);if(!el)return;
+  CHS[id]=new Chart(el,cfg);
+}
+function expChart(id){
+  const c=CHS[id];if(!c)return;
+  const a=document.createElement('a');a.href=c.toBase64Image();a.download=id+'.png';a.click();
+}
+function getSem(arr,sem){
+  if(sem==='all')return arr;
+  const s=parseInt(sem)*7;return arr.slice(s,Math.min(s+7,arr.length));
+}
+function switchTab(id,el){
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.tabcontent').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  setTimeout(()=>Object.values(CHS).forEach(c=>{try{c.resize()}catch(e){}}),30);
 }
 
+/* ──────────────────────────────────────
+   THEME CONFIG
+────────────────────────────────────── */
+const THEMES={
+  s:{
+    topBg:'#0F2C4A',acc:'#F4A623',accLight:'#FEF9EC',accText:'#C17D0A',
+    badgeText:'#0F2C4A',floatBg:'#F4A623',floatText:'#0F2C4A',
+    footerBg:'#0F2C4A',
+    srcChip:'background:rgba(244,166,35,.15);border:1px solid rgba(244,166,35,.3);color:#F4A623',
+    name:'STARTER · $99'
+  },
+  g:{
+    topBg:'#0A2218',acc:'#2ECC71',accLight:'#EAFBF1',accText:'#1A7340',
+    badgeText:'#0A2218',floatBg:'#2ECC71',floatText:'#0A2218',
+    footerBg:'#0A2218',
+    srcChip:'background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);color:#2ECC71',
+    name:'GROWTH · $199'
+  },
+  p:{
+    topBg:'#1A0F2E',acc:'#9B59B6',accLight:'#F5EEF8',accText:'#7D3C98',
+    badgeText:'#fff',floatBg:'#9B59B6',floatText:'#fff',
+    footerBg:'#1A0F2E',
+    srcChip:'background:rgba(155,89,182,.15);border:1px solid rgba(155,89,182,.3);color:#C39BD3',
+    name:'PRO · $299'
+  },
+};
+
+function applyTheme(t){
+  const r=document.documentElement;
+  r.style.setProperty('--acc',t.acc);
+  r.style.setProperty('--acc-light',t.accLight);
+}
+
+/* ──────────────────────────────────────
+   SWITCH PACKAGE
+────────────────────────────────────── */
+function setPkg(pkg,btn){
+  if(pkg===curPkg)return;
+  const root=document.getElementById('root');
+  root.classList.add('fading');
+  setTimeout(()=>{
+    Object.values(CHS).forEach(c=>{try{c.destroy()}catch(e){}});CHS={};
+    curPkg=pkg;curPer=0;curSem='all';
+    document.querySelectorAll('.pkg-btn').forEach(b=>b.className='pkg-btn');
+    btn.classList.add('sel-'+pkg);
+    applyTheme(THEMES[pkg]);
+    render();
+    root.classList.remove('fading');
+  },200);
+}
+
+/* ──────────────────────────────────────
+   SHARED BUILDERS
+────────────────────────────────────── */
+function kpi(lbl,val,delta,sub,ragCls,color,extra=''){
+  const dir=ragCls==='g'?'up':ragCls==='r'?'dn':'neutral';
+  return `<div class="kpi" style="--kpi-c:${color}">
+    <div class="kpi-accent" style="background:${color}"></div>
+    ${extra}
+    <div class="kpi-lbl">${lbl}</div>
+    <div class="kpi-val">${val}</div>
+    <div class="kpi-delta ${dir}">${delta}</div>
+    <div class="kpi-sub">${sub}</div>
+  </div>`;
+}
+function kpiRAG(lbl,val,delta,sub,cls,color){
+  return kpi(lbl,val,delta,sub,cls,color,`<div class="kpi-rag ${cls}"></div>`);
+}
+function kpiThresh(lbl,val,delta,sub,cls,color,tl){
+  return kpi(lbl,val,delta,sub,cls,color,`<div class="kpi-thresh ${cls}">${tl}</div>`);
+}
+
+function buildFoodCostBars(d,containerId){
+  const el=document.getElementById(containerId);if(!el)return;
+  el.innerHTML=d.fc_p.map(f=>`<div class="fc-item">
+    <div class="fc-name">${f.n}</div>
+    <div class="fc-bar"><div class="fc-fill" style="width:${f.p/50*100}%;background:${f.t==='r'?'#E74C3C':f.t==='w'?'#F39C12':'#1DAF72'}"></div></div>
+    <div class="fc-pct" style="color:${f.t==='r'?'#E74C3C':f.t==='w'?'#F39C12':'#1DAF72'}">${f.p}%</div>
+  </div>`).join('');
+}
+
+/* ──────────────────────────────────────
+   TABLE (GROWTH+PRO)
+────────────────────────────────────── */
+let allRows=[],filtRows=[],sortC=0,sortD=1,pg=0;const PG=9;
+function genRows(){
+  const cats=['Pupusas','Carnes','Mariscos','Ensaladas','Sopas'];
+  const prods=['Pupusas Revueltas','Res a la Plancha','Camarones Jalapeños','Ensalada César','Sopa de Res','Pollo Asado','Pupusas de Queso'];
+  const catMap={'Pupusas Revueltas':'Pupusas','Pupusas de Queso':'Pupusas','Res a la Plancha':'Carnes','Pollo Asado':'Carnes','Camarones Jalapeños':'Mariscos','Ensalada César':'Ensaladas','Sopa de Res':'Sopas'};
+  const est=['g','g','g','a','r'];
+  const rows=[];
+  const base=new Date(2025,4,31);
+  for(let i=0;i<55;i++){
+    const d=new Date(base);d.setDate(base.getDate()-i);
+    const p=prods[i%prods.length];
+    const u=Math.floor(5+Math.random()*30);
+    const pr=parseFloat((8+Math.random()*14).toFixed(2));
+    const tot=parseFloat((u*pr).toFixed(2));
+    const mar=Math.floor(50+Math.random()*35);
+    const e=est[Math.floor(Math.random()*est.length)];
+    rows.push({f:d.toLocaleDateString('es-SV'),prod:p,cat:catMap[p],u,tot,mar,e});
+  }
+  return rows;
+}
+function renderTbl(){
+  const b=document.getElementById('tblBody');if(!b)return;
+  const s=pg*PG,slice=filtRows.slice(s,s+PG);
+  b.innerHTML=slice.map(r=>`<tr>
+    <td style="font-family:'DM Mono',monospace;font-size:10px">${r.f}</td>
+    <td style="font-weight:600">${r.prod}</td>
+    <td>${r.cat}</td>
+    <td style="text-align:center">${r.u}</td>
+    <td style="font-weight:700;color:${THEMES[curPkg].acc}">$${r.tot.toFixed(2)}</td>
+    <td>${r.mar}%</td>
+    <td><span class="badge badge-${r.e}">${r.e==='g'?'✓ Vendido':r.e==='a'?'Pendiente':'⚠ Anulado'}</span></td>
+  </tr>`).join('');
+  const pi=document.getElementById('pgInfo');
+  if(pi)pi.textContent=`Pág. ${pg+1}/${Math.ceil(filtRows.length/PG)} · ${filtRows.length} registros`;
+}
+function filterTbl(){
+  const q=(document.getElementById('tblSearch')||{}).value||'';
+  filtRows=q.toLowerCase()?allRows.filter(r=>r.prod.toLowerCase().includes(q.toLowerCase())||r.cat.toLowerCase().includes(q.toLowerCase())):allRows.slice();
+  pg=0;renderTbl();
+}
+function sortTbl(c){
+  if(sortC===c)sortD*=-1;else{sortC=c;sortD=1;}
+  const k=['f','prod','cat','u','tot','mar','e'];
+  filtRows.sort((a,b)=>a[k[c]]<b[k[c]]?-sortD:a[k[c]]>b[k[c]]?sortD:0);
+  pg=0;renderTbl();
+}
+function prevPg(){if(pg>0){pg--;renderTbl();}}
+function nextPg(){if((pg+1)*PG<filtRows.length){pg++;renderTbl();}}
+
+/* ──────────────────────────────────────
+   MAIN RENDER
+────────────────────────────────────── */
 function render(){
-  const pi=parseInt(document.getElementById('fPer').value);
-  const sem=document.getElementById('fSem').value;
-  const d=D[pi];
-  document.getElementById('perLabel').textContent='📅 '+PER[pi];
-  const vd=getSemData(d.vd,sem);
-  const vdlabels=vd.map((_,i)=>{const base=sem==='all'?0:parseInt(sem)*7;return String(base+i+1);});
-  const vtot=vd.reduce((a,b)=>a+b,0);
-  const pctMeta=((d.vm/d.meta-1)*100).toFixed(1);
+  const T=THEMES[curPkg];
+  applyTheme(T);
+  const root=document.getElementById('root');
 
-  // KPIs
-  document.getElementById('kpiGrid').innerHTML=`
-    <div class="kpi g"><div class="lbl">Ventas del Mes</div><div class="val">$${d.vm.toLocaleString()}</div><div class="dlt up">▲ ${pctMeta}% vs meta</div><div class="sub">Meta $${d.meta.toLocaleString()}</div></div>
-    <div class="kpi t"><div class="lbl">Ticket Promedio</div><div class="val">$${d.tk.toFixed(2)}</div><div class="dlt up">▲ vs mes ant.</div><div class="sub">por persona</div></div>
-    <div class="kpi g"><div class="lbl">Clientes</div><div class="val">${d.cl.toLocaleString()}</div><div class="dlt up">▲ este mes</div><div class="sub">atendidos</div></div>
-    <div class="kpi ${d.fc>30?'r':'g'}"><div class="lbl">Food Cost</div><div class="val">${d.fc}%</div><div class="dlt ${d.fc>30?'dn':'up'}">${d.fc>30?'▲ sobre meta':'✓ bajo meta'}</div><div class="sub">meta &lt; 30%</div></div>
-    <div class="kpi ${d.can>4?'r':'a'}"><div class="lbl">Cancelaciones</div><div class="val">${d.can}%</div><div class="dlt dn">objetivo &lt; 3%</div><div class="sub">de reservas</div></div>
-    <div class="kpi t"><div class="lbl">Semana activa</div><div class="val">$${vtot.toLocaleString()}</div><div class="dlt">${sem==='all'?'Todo el mes':'Semana '+((parseInt(sem)||0)+1)}</div><div class="sub">en selección</div></div>`;
+  if(curPkg==='s') root.innerHTML=buildStarter(T);
+  else if(curPkg==='g') root.innerHTML=buildGrowth(T);
+  else root.innerHTML=buildPro(T);
 
-  // Alerta contextual
-  const alerts=[];
-  if(d.fc>30)alerts.push('Food cost '+d.fc+'% sobre meta del 30% — revisar proveedores y precios');
-  if(d.can>4)alerts.push('Tasa de cancelación '+d.can+'% supera objetivo del 3% — considerar política de confirmación');
-  d.fc_p.filter(x=>x.t==='r').forEach(x=>alerts.push(x.n+' con food cost del '+x.p+'% — evaluar precio o proveedor'));
-  document.getElementById('alertBox').innerHTML=alerts.length?'⚠ <strong>Alertas del período:</strong> '+alerts.join(' · '):'✅ Sin alertas críticas este período.';
-  document.getElementById('alertBox').style.background=alerts.length?'#FEF3C7':'#D1FAE5';
-  document.getElementById('alertBox').style.color=alerts.length?'#78350F':'#065F46';
-  document.getElementById('alertBox').style.borderLeftColor=alerts.length?'#F59E0B':'#10B981';
+  // float badge
+  let fb=document.getElementById('pkgFloat');
+  if(!fb){fb=document.createElement('div');fb.id='pkgFloat';fb.className='pkg-float';document.body.appendChild(fb);}
+  fb.style.background=T.floatBg;fb.style.color=T.floatText;
+  fb.style.boxShadow=`0 4px 20px ${T.acc}55`;
+  fb.textContent=T.name;
 
-  requestAnimationFrame(()=>{
-    // Ventas diarias
-    if(document.getElementById('cVentas'))
-      mk('cVentas',{type:'bar',data:{labels:vdlabels,datasets:[{label:'Ventas ($)',data:vd,
-        backgroundColor:vd.map(v=>v>=1000?'rgba(5,150,105,.85)':v>=700?'rgba(14,116,144,.75)':'rgba(220,38,38,.65)'),
-        borderRadius:3,borderSkipped:false}]},
-        options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()}}},
-          scales:{y:{ticks:{callback:v=>'$'+v},grid:{color:'#F1F5F9'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
-    // Platos
-    if(document.getElementById('cPlatos'))
-      mk('cPlatos',{type:'doughnut',data:{labels:d.pl.l,datasets:[{data:d.pl.d,backgroundColor:cols6,borderWidth:2,borderColor:'#fff'}]},
-        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9},padding:6}},tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()}}}}});
-    // Food trend
-    if(document.getElementById('cFoodTrend'))
-      mk('cFoodTrend',{type:'line',data:{labels:['Dic','Ene','Feb','Mar','Abr','May'],datasets:[
-        {label:'Food Cost %',data:[29.8,30.2,28.9,31.1,29.8,d.fc],borderColor:'#DC2626',backgroundColor:'rgba(220,38,38,.1)',fill:true,tension:.4,pointRadius:4},
-        {label:'Meta 30%',data:[30,30,30,30,30,30],borderColor:'#059669',borderDash:[5,5],borderWidth:1.5,pointRadius:0}]},
-        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}},
-          scales:{y:{min:25,max:35,ticks:{callback:v=>v+'%'},grid:{color:'#F1F5F9'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
-    // Costos
-    if(document.getElementById('cCostos'))
-      mk('cCostos',{type:'pie',data:{labels:['Ingredientes','Nómina','Renta','Servicios','Otros'],
-        datasets:[{data:[31,28,18,12,11],backgroundColor:['#DC2626','#1B3A5C','#E8A020','#0E7490','#94A3B8'],borderWidth:2,borderColor:'#fff'}]},
-        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9},padding:6}}}}});
-    // Horas
-    if(document.getElementById('cHoras'))
-      mk('cHoras',{type:'bar',data:{labels:d.hr.l,datasets:[{label:'Ventas ($)',data:d.hr.d,
-        backgroundColor:'rgba(14,116,144,.75)',borderRadius:3}]},
-        options:{responsive:true,plugins:{legend:{display:false}},
-          scales:{y:{ticks:{callback:v=>'$'+v},grid:{color:'#F1F5F9'}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
-    // Comparativo
-    if(document.getElementById('cComp'))
-      mk('cComp',{type:'bar',data:{labels:PER.slice().reverse(),datasets:[
-        {label:'Ventas',data:[D[2].vm,D[1].vm,D[0].vm],backgroundColor:['rgba(14,116,144,.6)','rgba(14,116,144,.75)','rgba(14,116,144,.95)'],borderRadius:4},
-        {label:'Meta',data:[D[2].meta,D[1].meta,D[0].meta],backgroundColor:'rgba(220,38,38,.15)',borderWidth:1.5,borderColor:'#DC2626',type:'bar',borderRadius:4}]},
-        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}},
-          scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#F1F5F9'}}}}});
-    // Meta gauge bar
-    if(document.getElementById('cMeta'))
-      mk('cMeta',{type:'bar',data:{labels:['Real','Meta'],datasets:[{data:[d.vm,d.meta],
-        backgroundColor:['rgba(5,150,105,.85)','rgba(220,38,38,.2)'],borderRadius:6}]},
-        options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},
-          scales:{x:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#F1F5F9'}},y:{grid:{display:false}}}}});
-    // Por día de semana
-    if(document.getElementById('cDias'))
-      mk('cDias',{type:'bar',data:{labels:['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],
-        datasets:[{data:[820,790,850,780,1100,1380,1200],backgroundColor:['rgba(14,116,144,.7)','rgba(14,116,144,.7)','rgba(14,116,144,.7)','rgba(14,116,144,.7)','rgba(232,160,32,.85)','rgba(5,150,105,.9)','rgba(5,150,105,.8)'],borderRadius:4}]},
-        options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{ticks:{callback:v=>'$'+v},grid:{color:'#F1F5F9'}}}}});
-  });
+  // run charts after DOM settles
+  requestAnimationFrame(()=>buildCharts());
 
-  // Meseros
-  if(document.getElementById('tMeseros'))
-    document.getElementById('tMeseros').innerHTML=`<thead><tr><th>Rk</th><th>Mesero</th><th>Ventas</th><th>Mesas</th><th>Prom.</th></tr></thead><tbody>`+
-      d.ms.map(m=>`<tr><td>${m.rk}</td><td>${m.n}</td><td style="font-weight:700;color:#0E7490">${m.v}</td><td>${m.m}</td><td>${m.pr}</td></tr>`).join('')+'</tbody>';
-
-  // Food cost list
-  if(document.getElementById('foodCostList'))
-    document.getElementById('foodCostList').innerHTML=d.fc_p.map(f=>`
-      <div class="food-item">
-        <div class="fn">${f.n}</div>
-        <div class="fb"><div class="ff" style="width:${f.p/50*100}%;background:${f.t==='r'?'#DC2626':f.t==='w'?'#D97706':'#059669'}"></div></div>
-        <div class="fp" style="color:${f.t==='r'?'#DC2626':f.t==='w'?'#D97706':'#059669'}">${f.p}%</div>
-      </div>`).join('');
-
-  // Resumen ejecutivo
-  if(document.getElementById('resumen'))
-    document.getElementById('resumen').innerHTML=`
-      <b>Período:</b> ${PER[pi]}<br>
-      <b>Ventas:</b> $${d.vm.toLocaleString()} (${pctMeta>0?'+':''}${pctMeta}% vs meta)<br>
-      <b>Ticket prom.:</b> $${d.tk.toFixed(2)}<br>
-      <b>Clientes:</b> ${d.cl.toLocaleString()}<br>
-      <b>Food cost:</b> ${d.fc}% ${d.fc>30?'⚠ sobre meta':'✅ bajo meta'}<br>
-      <b>Cancelaciones:</b> ${d.can}% ${d.can>4?'⚠ alto':'✅ normal'}<br>
-      <b>Plato estrella:</b> ${d.pl.l[0]}<br>
-      <b>Mesero top:</b> ${d.ms[0].n}<br>
-      <b>Hora pico:</b> 1pm ($${Math.max(...d.hr.d).toLocaleString()})`;
+  // table
+  allRows=genRows();filtRows=allRows.slice();renderTbl();
 }
+
+/* ══════════════════════════════════════
+   STARTER HTML
+   · 1 tab (none), clean minimal
+   · 5 KPIs, simple left-stripe color
+   · 3 charts only
+   · 2 locked sections hinting upgrades
+══════════════════════════════════════ */
+function buildStarter(T){
+  const d=D[curPer];
+  const pct=((d.vm/d.meta-1)*100).toFixed(1);
+  const alerts=[];
+  if(d.fc>30)alerts.push(`Food cost ${d.fc}% sobre meta`);
+  if(d.can>4)alerts.push(`Cancelaciones ${d.can}% — supera objetivo 3%`);
+  const alertHtml=alerts.length
+    ?`<div class="alert-bar warn">⚠ ${alerts.join(' · ')}</div>`
+    :`<div class="alert-bar ok">✅ Sin alertas críticas este período.</div>`;
+
+  return `
+  <!-- TOPBAR -->
+  <div class="topbar" style="background:${T.topBg}">
+    <div class="brand">DATAVISUAL SV</div>
+    <div class="top-title" style="font-family:'DM Sans',sans-serif">🍽️ Dashboard Restaurante — El Rincón Familiar</div>
+    <div class="pkg-badge" style="background:${T.acc};color:${T.badgeText}">STARTER · $99</div>
+  </div>
+  <!-- SUBBAR -->
+  <div class="subbar" style="background:${T.topBg}">
+    <div class="subbar-info">
+      <h2>El Rincón Familiar, S.A.</h2>
+      <p>Restaurante · San Salvador · 1 fuente de datos procesada</p>
+    </div>
+    <div class="subbar-right">
+      <div class="src-chip" style="${T.srcChip}">📂 Ventas XLS</div>
+      <div class="per-chip">📅 ${PER[curPer]}</div>
+    </div>
+  </div>
+  <!-- FILTROS STARTER: solo período y semana -->
+  <div class="filters">
+    <span class="f-lbl">Período:</span>
+    <select onchange="curPer=parseInt(this.value);render()">
+      ${PER.map((p,i)=>`<option value="${i}" ${i===curPer?'selected':''}>${p}</option>`).join('')}
+    </select>
+    <div class="f-sep"></div>
+    <span class="f-lbl">Rango:</span>
+    <select onchange="curSem=this.value;render()">
+      <option value="all">Todo el mes</option>
+      <option value="0">Semana 1 (1–7)</option>
+      <option value="1">Semana 2 (8–14)</option>
+      <option value="2">Semana 3 (15–21)</option>
+      <option value="3">Semana 4 (22–28)</option>
+    </select>
+    <div class="f-space"></div>
+    <div class="f-wm">DEMO · datavisualsv.com</div>
+  </div>
+  ${alertHtml}
+  <!-- 5 KPIs simples (sin RAG, sin umbral) -->
+  <div class="kpi-grid-5">
+    ${kpi('Ventas del Mes','$'+d.vm.toLocaleString(),(pct>0?'▲ '+pct+'%':'▼ '+Math.abs(pct)+'%')+' vs meta','Meta $'+d.meta.toLocaleString(),d.vm>=d.meta?'g':'r',T.acc)}
+    ${kpi('Ticket Promedio','$'+d.tk.toFixed(2),'▲ vs mes anterior','por cliente','g','#1A8FA5')}
+    ${kpi('Clientes',d.cl.toLocaleString(),'Este período','atendidos','neutral','#1A2535')}
+    ${kpi('Food Cost',d.fc+'%',d.fc>30?'▲ SOBRE meta':'✓ Bajo meta','Meta < 30%',d.fc>30?'r':d.fc>28?'a':'g',d.fc>30?'#E74C3C':'#1DAF72')}
+    ${kpi('Cancelaciones',d.can+'%','Objetivo < 3%','de reservas',d.can>4?'r':d.can>3?'a':'g',d.can>4?'#E74C3C':'#1DAF72')}
+  </div>
+  <!-- 3 GRÁFICAS -->
+  <div class="g31">
+    <div class="card">
+      <div class="card-hd"><div class="card-title">📈 Ventas Diarias</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Barras por día</div></div>
+      <canvas id="cVentas" height="110"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">🍕 Top Productos</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Dona</div></div>
+      <canvas id="cPlatos" height="160"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">📊 Meta vs Real</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Barras H</div></div>
+      <canvas id="cMeta" height="160"></canvas>
+    </div>
+  </div>
+  <!-- LOCKED HINTS (lo que el cliente no tiene) -->
+  <div class="g2" style="padding-top:0;padding-bottom:4px">
+    <div class="locked-hint">
+      <div class="lk-icon">🔒</div>
+      <div class="lk-title">Tabla de Transacciones Navegable</div>
+      <div style="font-size:10px;color:#94A3B8">Búsqueda, orden por columna y paginación<br>de todos los registros del período.</div>
+      <div class="lk-badge" style="background:#EAFBF1;color:#1A7340;margin-top:4px">Disponible en GROWTH $199 →</div>
+    </div>
+    <div class="locked-hint">
+      <div class="lk-icon">🔒</div>
+      <div class="lk-title">Pestañas + 5 KPIs adicionales con umbrales</div>
+      <div style="font-size:10px;color:#94A3B8">Pestaña Ventas + Costos/Inventario.<br>Indicadores configurados con RAG automático.</div>
+      <div class="lk-badge" style="background:#EAFBF1;color:#1A7340;margin-top:4px">Disponible en GROWTH $199 →</div>
+    </div>
+  </div>
+  <div class="gfull" style="padding-bottom:16px">
+    <div class="locked-hint" style="flex-direction:row;justify-content:center;gap:16px;padding:14px 20px">
+      <div class="lk-icon" style="font-size:18px">🔒</div>
+      <div style="text-align:left">
+        <div class="lk-title">Panel Ejecutivo 30s · Sistema RAG · Comparativo año anterior · Proyección · Exportación PNG</div>
+        <div style="font-size:10px;color:#94A3B8;margin-top:3px">5 pestañas: Ventas / Gastos / Inventario / Equipo / Ejecutivo. KPIs ilimitados. URL propia.</div>
+      </div>
+      <div class="lk-badge" style="background:#F5EEF8;color:#7D3C98;white-space:nowrap;align-self:center">Disponible en PRO $299 →</div>
+    </div>
+  </div>
+  <div class="disclaimer">⚠ Datos de demostración. Los datos reales provienen de las fuentes del cliente. · datavisualsv.com</div>
+  <div class="footer" style="background:${T.footerBg}">© 2025 DataVisual SV · Paquete STARTER · 1 ronda de ajustes · hola@datavisualsv.com</div>`;
+}
+
+/* ══════════════════════════════════════
+   GROWTH HTML
+   · 2 tabs (Ventas + Costos)
+   · 10 KPIs con threshold badge
+   · 6 gráficas interactivas
+   · Tabla navegable
+   · Branding completo verde
+   · 1 locked hint → PRO
+══════════════════════════════════════ */
+function buildGrowth(T){
+  const d=D[curPer];
+  const pct=((d.vm/d.meta-1)*100).toFixed(1);
+  const pctAnt=curPer<2?((d.vm/D[curPer+1].vm-1)*100).toFixed(1):'—';
+
+  return `
+  <div class="topbar" style="background:${T.topBg}">
+    <div class="brand">DATAVISUAL SV</div>
+    <div class="top-title" style="font-family:'Syne',sans-serif;letter-spacing:.5px">🍽️ El Rincón Familiar — Control Real del Negocio</div>
+    <div class="pkg-badge" style="background:${T.acc};color:${T.badgeText}">GROWTH · $199</div>
+  </div>
+  <div class="subbar" style="background:${T.topBg}">
+    <div class="subbar-info">
+      <h2 style="font-family:'Syne',sans-serif">El Rincón Familiar, S.A.</h2>
+      <p>Restaurante · San Salvador · 2 fuentes integradas: Ventas + Costos/Gastos</p>
+    </div>
+    <div class="subbar-right">
+      <div class="src-chip" style="${T.srcChip}">📂 Ventas XLS</div>
+      <div class="src-chip" style="${T.srcChip}">📂 Costos XLS</div>
+      <div class="per-chip">📅 ${PER[curPer]}</div>
+    </div>
+  </div>
+  <!-- FILTROS GROWTH: más opciones -->
+  <div class="filters">
+    <span class="f-lbl">Mes:</span>
+    <select onchange="curPer=parseInt(this.value);render()">
+      ${PER.map((p,i)=>`<option value="${i}" ${i===curPer?'selected':''}>${p}</option>`).join('')}
+    </select>
+    <div class="f-sep"></div>
+    <span class="f-lbl">Semana:</span>
+    <select onchange="curSem=this.value;render()">
+      <option value="all">Todo el mes</option>
+      <option value="0">Semana 1</option><option value="1">Semana 2</option>
+      <option value="2">Semana 3</option><option value="3">Semana 4</option>
+    </select>
+    <div class="f-sep"></div>
+    <span class="f-lbl">Categoría:</span>
+    <select><option>Todos los productos</option><option>Pupusas</option><option>Carnes</option><option>Mariscos</option><option>Otros</option></select>
+    <div class="f-space"></div>
+    <div class="f-wm">DEMO · datavisualsv.com</div>
+  </div>
+  <!-- TABS 2 -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('gv',this)">📈 Ventas <span class="tab-pill">5 KPIs</span></div>
+    <div class="tab" onclick="switchTab('gc',this)">💰 Costos / Inventario <span class="tab-pill">5 KPIs</span></div>
+  </div>
+
+  <!-- TAB VENTAS -->
+  <div id="tab-gv" class="tabcontent active">
+    <div class="alert-bar ${d.fc>30||d.can>4?'warn':'ok'}">
+      ${d.fc>30||d.can>4?`⚠ <b>Alertas:</b> ${[d.fc>30?`Food cost ${d.fc}% sobre meta`:'',d.can>4?`Cancelaciones ${d.can}% supera objetivo`:''].filter(Boolean).join(' · ')}`:'✅ Sin alertas críticas este período.'}
+    </div>
+    <!-- 5 KPIs con threshold badge -->
+    <div class="kpi-grid-10">
+      ${kpiThresh('Ventas del Mes','$'+d.vm.toLocaleString(),(pct>0?'▲ '+pct:'▼ '+Math.abs(pct))+'% vs meta','Meta $'+d.meta.toLocaleString(),d.vm>=d.meta?'g':'r',T.acc,d.vm>=d.meta?'✓ OK':'⚠ BAJO')}
+      ${kpiThresh('Ticket Promedio','$'+d.tk.toFixed(2),'▲ vs mes anterior','Umbral: > $16',d.tk>16?'g':'a','#1A8FA5',d.tk>16?'✓ OK':'~ Atención')}
+      ${kpiThresh('Clientes',d.cl.toLocaleString(),pctAnt!=='—'?(pctAnt>0?'▲ ':'▼ ')+Math.abs(pctAnt)+'% vs ant.':'Primer mes','total del período','g','#334155','OK')}
+      ${kpiThresh('Cancelaciones',d.can+'%','Umbral < 3%',d.can>4?'⚠ Alto':'✓ Bajo control',d.can>4?'r':d.can>3?'a':'g','#E74C3C',d.can>4?'⚠ ALTO':'✓ OK')}
+      ${kpiThresh('Margen Neto',d.margen+'%','Ventas − Gastos','Meta > 30%',d.margen>=30?'g':d.margen>=25?'a':'r',T.acc,d.margen>=30?'✓ OK':'⚠ BAJO')}
+    </div>
+    <div class="g21">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📈 Ventas Diarias</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Barras</div></div>
+        <canvas id="cVentas" height="100"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">🍕 Mix Productos</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Donut</div></div>
+        <canvas id="cPlatos" height="160"></canvas>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📈 Tendencia Mensual</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Línea</div></div>
+        <canvas id="cTrend" height="130"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📊 Comparativo 3 meses</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Barras</div></div>
+        <canvas id="cComp" height="130"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📆 Por Día de Semana</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Barras</div></div>
+        <canvas id="cDias" height="130"></canvas>
+      </div>
+    </div>
+    <!-- TABLA NAVEGABLE -->
+    <div class="gfull" style="padding-bottom:6px">
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">📋 Detalle de Transacciones <span style="font-size:10px;color:#64748B;font-weight:400;margin-left:4px">(búsqueda · orden por columna · paginación)</span></div>
+        </div>
+        <div class="tbl-srch">
+          <input type="text" id="tblSearch" placeholder="🔍 Buscar producto, categoría…" oninput="filterTbl()">
+          <span id="pgInfo" style="font-size:10px;color:#64748B;white-space:nowrap"></span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="tbl">
+            <thead><tr>
+              <th onclick="sortTbl(0)">Fecha ▾</th><th onclick="sortTbl(1)">Producto</th>
+              <th onclick="sortTbl(2)">Categoría</th><th onclick="sortTbl(3)">Unidades</th>
+              <th onclick="sortTbl(4)">Total $</th><th onclick="sortTbl(5)">Margen %</th><th onclick="sortTbl(6)">Estado</th>
+            </tr></thead>
+            <tbody id="tblBody"></tbody>
+          </table>
+        </div>
+        <div class="pg-row">
+          <button class="pg-btn" onclick="prevPg()">← Anterior</button>
+          <span id="pgInfo" style="font-size:10px;color:#64748B"></span>
+          <button class="pg-btn" onclick="nextPg()">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+    <!-- locked PRO hint -->
+    <div class="gfull" style="padding-bottom:16px">
+      <div class="locked-hint" style="flex-direction:row;justify-content:center;gap:16px;padding:14px 20px">
+        <div class="lk-icon" style="font-size:18px">🔒</div>
+        <div style="text-align:left">
+          <div class="lk-title">Panel Ejecutivo · RAG automático · Año anterior vs actual · Proyección · Exportación PNG · 5 pestañas · URL propia</div>
+          <div style="font-size:10px;color:#94A3B8;margin-top:2px">Sala de mando completa con KPIs ilimitados y alertas que hablan solos.</div>
+        </div>
+        <div class="lk-badge" style="background:#F5EEF8;color:#7D3C98;white-space:nowrap;align-self:center">Disponible en PRO $299 →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB COSTOS -->
+  <div id="tab-gc" class="tabcontent">
+    <div class="kpi-grid-10">
+      ${kpiThresh('Food Cost Global',d.fc+'%','Umbral: < 30%',d.fc>30?'⚠ Sobre meta':'✓ Bajo meta',d.fc>30?'r':d.fc>28?'a':'g','#E74C3C',d.fc>30?'⚠ ALTO':'✓ OK')}
+      ${kpiThresh('Gastos Totales','$'+d.gastos.toLocaleString(),((d.gastos/d.vm)*100).toFixed(1)+'% de ventas','Nómina + Insumos','a','#E8860A','Revisar')}
+      ${kpiThresh('Utilidad Bruta','$'+(d.vm-d.gastos).toLocaleString(),'Ventas − Gastos','del período','g',T.acc,'✓ OK')}
+      ${kpiThresh('Platos en Rojo',d.fc_p.filter(x=>x.t==='r').length,'Food cost > 40%','Ajuste urgente',d.fc_p.some(x=>x.t==='r')?'r':'g','#E74C3C',d.fc_p.some(x=>x.t==='r')?'⚠ ALTO':'✓ OK')}
+      ${kpiThresh('Nómina / Ventas','28%','Umbral < 30%','✓ Bajo control','g','#1A8FA5','✓ OK')}
+    </div>
+    <div class="g2" style="padding-bottom:14px">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">🥩 Food Cost por Plato</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Meta &lt; 30%</div></div>
+        <div id="fcList"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">💰 Estructura de Costos</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Pie</div></div>
+        <canvas id="cCostos" height="160"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">⚠ Datos de demostración. Los datos reales provienen de las fuentes del cliente. · datavisualsv.com</div>
+  <div class="footer" style="background:${T.footerBg}">© 2025 DataVisual SV · Paquete GROWTH · Incluye URL Netlify + capacitación 45 min + 2 rondas de ajustes · hola@datavisualsv.com</div>`;
+}
+
+/* ══════════════════════════════════════
+   PRO HTML
+   · 5 tabs completas
+   · Dark executive hero panel
+   · RAG strip en cada tab
+   · KPIs con punto RAG pulsante
+   · Comparativo año anterior en todas partes
+   · Botón ⬇ PNG en cada gráfica
+   · Heatmap de horas
+   · Proyección Jun–Ago
+   · Inventario tab
+══════════════════════════════════════ */
+function buildPro(T){
+  const d=D[curPer];
+  const pct=((d.vm/d.meta-1)*100).toFixed(1);
+  const pctAnt=((d.vm/ANT[curPer]-1)*100).toFixed(1);
+
+  return `
+  <div class="topbar" style="background:${T.topBg}">
+    <div class="brand">DATAVISUAL SV</div>
+    <div class="top-title" style="font-family:'Raleway',sans-serif;font-weight:800;letter-spacing:.5px">🍽️ El Rincón Familiar — Sala de Mando Ejecutiva</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;font-weight:600;color:${T.acc};opacity:.7">dashboard.elrinconfamiliar.com</div>
+      <div class="pkg-badge" style="background:${T.acc};color:${T.badgeText}">PRO · $299</div>
+    </div>
+  </div>
+  <div class="subbar" style="background:${T.topBg}">
+    <div class="subbar-info">
+      <h2 style="font-family:'Raleway',sans-serif">El Rincón Familiar, S.A. de C.V.</h2>
+      <p>Restaurante · San Salvador · 3 fuentes integradas · Sistema RAG activo · ${PER[curPer]}</p>
+    </div>
+    <div class="subbar-right">
+      <div class="src-chip" style="${T.srcChip}">📂 POS Ventas</div>
+      <div class="src-chip" style="${T.srcChip}">📂 Banco XLS</div>
+      <div class="src-chip" style="${T.srcChip}">📂 Inventario</div>
+      <div class="per-chip">📅 ${PER[curPer]}</div>
+    </div>
+  </div>
+  <!-- FILTROS PRO: máxima granularidad -->
+  <div class="filters">
+    <span class="f-lbl">Mes:</span>
+    <select onchange="curPer=parseInt(this.value);render()">
+      ${PER.map((p,i)=>`<option value="${i}" ${i===curPer?'selected':''}>${p}</option>`).join('')}
+    </select>
+    <div class="f-sep"></div>
+    <span class="f-lbl">Semana:</span>
+    <select onchange="curSem=this.value;render()">
+      <option value="all">Todo el mes</option><option value="0">Sem 1</option>
+      <option value="1">Sem 2</option><option value="2">Sem 3</option><option value="3">Sem 4</option>
+    </select>
+    <div class="f-sep"></div>
+    <span class="f-lbl">Vendedor:</span>
+    <select><option>Todos</option><option>María López</option><option>José Martínez</option><option>Ana Pérez</option></select>
+    <div class="f-sep"></div>
+    <span class="f-lbl">Categoría:</span>
+    <select><option>Todos</option><option>Pupusas</option><option>Carnes</option><option>Mariscos</option></select>
+    <div class="f-space"></div>
+    <div class="f-wm">PRO · datavisualsv.com</div>
+  </div>
+  <!-- 5 TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('pe',this)">🏛️ Ejecutivo <span class="tab-pill">30s</span></div>
+    <div class="tab" onclick="switchTab('pv',this)">📈 Ventas <span class="tab-pill">RAG</span></div>
+    <div class="tab" onclick="switchTab('pg',this)">💰 Gastos <span class="tab-pill">RAG</span></div>
+    <div class="tab" onclick="switchTab('pi',this)">📦 Inventario <span class="tab-pill">RAG</span></div>
+    <div class="tab" onclick="switchTab('peq',this)">🧑‍🍳 Equipo <span class="tab-pill">KPIs</span></div>
+  </div>
+
+  <!-- ── TAB EJECUTIVO ── -->
+  <div id="tab-pe" class="tabcontent active">
+    <div class="exec-hero" style="background:${T.topBg}">
+      <div style="flex:1">
+        <h2>Ingresos del Mes</h2>
+        <div class="big">$${d.vm.toLocaleString()}</div>
+        <div class="sub">vs Meta $${d.meta.toLocaleString()} · ${pct>0?'+':''}${pct}% · vs 2024: ${pctAnt>0?'+':''}${pctAnt}%</div>
+      </div>
+      <div class="exec-stats">
+        <div class="estat"><div class="ev">$${d.tk.toFixed(2)}</div><div class="el">Ticket Prom.</div></div>
+        <div class="estat"><div class="ev">${d.cl.toLocaleString()}</div><div class="el">Clientes</div></div>
+        <div class="estat"><div class="ev">${d.margen}%</div><div class="el">Margen</div></div>
+      </div>
+    </div>
+    <!-- RAG SUMMARY CARDS -->
+    <div class="rag-summary">
+      ${ragItem('Ventas vs Meta',pct>0?'+'+pct+'%':pct+'%',d.vm>=d.meta?'g':'r',d.vm>=d.meta?'✓ Superado':'⚠ Bajo meta',T)}
+      ${ragItem('Food Cost',d.fc+'%',d.fc>30?'r':d.fc>28?'a':'g',d.fc>30?'⚠ Sobre meta':'✓ OK',T)}
+      ${ragItem('Cancelaciones',d.can+'%',d.can>4?'r':d.can>3?'a':'g',d.can>4?'⚠ Alto':'✓ Bajo control',T)}
+      ${ragItem('Margen Neto',d.margen+'%',d.margen>=30?'g':d.margen>=25?'a':'r',d.margen>=30?'✓ Meta OK':'⚠ Bajo meta',T)}
+      ${ragItem('Stock Crítico',d.inv.filter(x=>x.t==='r').length+' items',d.inv.some(x=>x.t==='r')?'r':d.inv.some(x=>x.t==='a')?'a':'g',d.inv.some(x=>x.t==='r')?'⚠ Pedir HOY':'✓ OK',T)}
+      ${ragItem('vs Año Anterior',pctAnt>0?'+'+pctAnt+'%':pctAnt+'%',pctAnt>0?'g':'r',pctAnt>0?'✓ Mejor que 2024':'▼ Peor que 2024',T)}
+    </div>
+    <div class="g21" style="padding-top:12px">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📈 Ventas 2025 vs 2024 + Proyección Jun–Ago</div><button class="exp-btn" onclick="expChart('cProj')">⬇ PNG</button></div>
+        <canvas id="cProj" height="100"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📊 Comparativo Año Anterior</div><button class="exp-btn" onclick="expChart('cYearComp')">⬇ PNG</button></div>
+        <canvas id="cYearComp" height="140"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB VENTAS ── -->
+  <div id="tab-pv" class="tabcontent">
+    <div class="rag-strip">
+      <div class="rag-cell ${d.vm>=d.meta?'g':'r'}"><div class="rag-dot ${d.vm>=d.meta?'g':'r'}"></div>${d.vm>=d.meta?'🟢 Ventas sobre meta':'🔴 Ventas bajo meta'}</div>
+      <div class="rag-cell ${d.can>4?'r':d.can>3?'a':'g'}"><div class="rag-dot ${d.can>4?'r':d.can>3?'a':'g'}"></div>${d.can>4?'🔴':'🟢'} Cancelaciones ${d.can}%</div>
+      <div class="rag-cell g"><div class="rag-dot g"></div>🟢 Ticket $${d.tk.toFixed(2)} — OK</div>
+      <div class="rag-cell g"><div class="rag-dot g"></div>🟢 Retorno positivo vs 2024</div>
+    </div>
+    <div class="kpi-grid-free">
+      ${kpiRAG('Ventas del Mes','$'+d.vm.toLocaleString(),(pct>0?'▲ '+pct:'▼ '+Math.abs(pct))+'% vs meta','Meta $'+d.meta.toLocaleString(),d.vm>=d.meta?'g':'r',T.acc)}
+      ${kpiRAG('vs Año Anterior',(pctAnt>0?'+':'')+pctAnt+'%','$'+ANT[curPer].toLocaleString()+' en 2024','mismo período',pctAnt>0?'g':'r',T.acc)}
+      ${kpiRAG('Ticket Promedio','$'+d.tk.toFixed(2),'▲ vs mes anterior','Umbral: > $16',d.tk>16?'g':'a','#1A8FA5')}
+      ${kpiRAG('Clientes',d.cl.toLocaleString(),'Total del período','atendidos','g','#334155')}
+      ${kpiRAG('Cancelaciones',d.can+'%','Umbral < 3%',d.can>4?'⚠ Alto':'✓ OK',d.can>4?'r':d.can>3?'a':'g','#E74C3C')}
+      ${kpiRAG('Día Pico','Sábado','$1,380 promedio','Mayor volumen','g','#1DAF72')}
+    </div>
+    <div class="g21">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📈 Ventas Diarias</div><button class="exp-btn" onclick="expChart('cVentas')">⬇ PNG</button></div>
+        <canvas id="cVentas" height="100"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">🍕 Mix Productos</div><button class="exp-btn" onclick="expChart('cPlatos')">⬇ PNG</button></div>
+        <canvas id="cPlatos" height="160"></canvas>
+      </div>
+    </div>
+    <div class="g3" style="padding-bottom:14px">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📈 2025 vs 2024</div><button class="exp-btn" onclick="expChart('cTrend')">⬇ PNG</button></div>
+        <canvas id="cTrend" height="130"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📊 Comparativo 3 meses</div><button class="exp-btn" onclick="expChart('cComp')">⬇ PNG</button></div>
+        <canvas id="cComp" height="130"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">🌡️ Heatmap Días × Horas</div></div>
+        <div id="heatmap" style="padding-top:4px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB GASTOS ── -->
+  <div id="tab-pg" class="tabcontent">
+    <div class="rag-strip">
+      <div class="rag-cell ${d.fc>30?'r':d.fc>28?'a':'g'}"><div class="rag-dot ${d.fc>30?'r':d.fc>28?'a':'g'}"></div>${d.fc>30?'🔴':'🟢'} Food Cost ${d.fc}%</div>
+      <div class="rag-cell ${d.margen>=30?'g':d.margen>=25?'a':'r'}"><div class="rag-dot ${d.margen>=30?'g':d.margen>=25?'a':'r'}"></div>${d.margen>=30?'🟢':'🔴'} Margen ${d.margen}%</div>
+      <div class="rag-cell ${d.fc_p.some(x=>x.t==='r')?'r':'g'}"><div class="rag-dot ${d.fc_p.some(x=>x.t==='r')?'r':'g'}"></div>${d.fc_p.some(x=>x.t==='r')?'🔴 '+d.fc_p.filter(x=>x.t==='r').length+' platos en rojo':'🟢 Platos OK'}</div>
+    </div>
+    <div class="kpi-grid-free">
+      ${kpiRAG('Food Cost Global',d.fc+'%','Umbral: < 30%',d.fc>30?'⚠ Sobre meta':'✓ OK',d.fc>30?'r':d.fc>28?'a':'g','#E74C3C')}
+      ${kpiRAG('Gastos Totales','$'+d.gastos.toLocaleString(),((d.gastos/d.vm)*100).toFixed(1)+'% de ventas','Nómina+Insumos+Renta','a','#E8860A')}
+      ${kpiRAG('Margen Neto',d.margen+'%','Ventas − Gastos','Meta > 30%',d.margen>=30?'g':d.margen>=25?'a':'r',T.acc)}
+      ${kpiRAG('Platos en Rojo',d.fc_p.filter(x=>x.t==='r').length,'food cost > 40%','ajuste urgente',d.fc_p.some(x=>x.t==='r')?'r':'g','#E74C3C')}
+      ${kpiRAG('Nómina / Ventas','28%','Umbral < 30%','✓ OK','g','#1A8FA5')}
+    </div>
+    <div class="g2" style="padding-bottom:14px">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">🥩 Food Cost por Plato</div><div class="card-tag" style="background:${T.accLight};color:${T.accText}">Meta &lt; 30%</div></div>
+        <div id="fcList"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">💰 Estructura de Costos</div><button class="exp-btn" onclick="expChart('cCostos')">⬇ PNG</button></div>
+        <canvas id="cCostos" height="160"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB INVENTARIO ── -->
+  <div id="tab-pi" class="tabcontent">
+    <div class="rag-strip">
+      <div class="rag-cell ${d.inv.filter(x=>x.t==='r').length>0?'r':'g'}"><div class="rag-dot ${d.inv.filter(x=>x.t==='r').length>0?'r':'g'}"></div>🔴 ${d.inv.filter(x=>x.t==='r').length} Críticos — Pedir HOY</div>
+      <div class="rag-cell ${d.inv.filter(x=>x.t==='a').length>0?'a':'g'}"><div class="rag-dot ${d.inv.filter(x=>x.t==='a').length>0?'a':'g'}"></div>🟡 ${d.inv.filter(x=>x.t==='a').length} En alerta — Esta semana</div>
+      <div class="rag-cell g"><div class="rag-dot g"></div>🟢 ${d.inv.filter(x=>x.t==='g').length} con stock saludable</div>
+    </div>
+    <div class="g4">
+      ${kpiRAG('Items Críticos',d.inv.filter(x=>x.t==='r').length,'Stock < mínimo','Pedir HOY',d.inv.some(x=>x.t==='r')?'r':'g','#E74C3C')}
+      ${kpiRAG('Items en Alerta',d.inv.filter(x=>x.t==='a').length,'Cerca del mínimo','Esta semana',d.inv.some(x=>x.t==='a')?'a':'g','#F39C12')}
+      ${kpiRAG('Items OK',d.inv.filter(x=>x.t==='g').length,'Stock saludable','Sin acción','g','#1DAF72')}
+      ${kpiRAG('Valor Inventario','$3,240','Estimado actual','Costo reposición','g',T.acc)}
+    </div>
+    <div class="gfull">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📊 Stock Actual vs Mínimo</div><button class="exp-btn" onclick="expChart('cInv')">⬇ PNG</button></div>
+        <canvas id="cInv" height="80"></canvas>
+      </div>
+    </div>
+    <div class="gfull" style="padding-bottom:16px">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📋 Detalle de Inventario</div></div>
+        <div style="overflow-x:auto"><table class="tbl">
+          <thead><tr><th>Producto</th><th>Stock Actual</th><th>Mínimo</th><th>Costo Unit.</th><th>Estado</th></tr></thead>
+          <tbody>${d.inv.map(i=>`<tr>
+            <td style="font-weight:600">${i.p}</td>
+            <td style="font-weight:700;color:${i.t==='r'?'#E74C3C':i.t==='a'?'#F39C12':'#1DAF72'}">${i.s} u.</td>
+            <td>${i.min} u.</td>
+            <td style="font-family:'DM Mono',monospace;font-size:10px">$${i.cu.toFixed(2)}</td>
+            <td><span class="badge badge-${i.t}">${i.t==='r'?'⚠ Pedir YA':i.t==='a'?'~ Esta semana':'✓ OK'}</span></td>
+          </tr>`).join('')}</tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB EQUIPO ── -->
+  <div id="tab-peq" class="tabcontent">
+    <div class="kpi-grid-free">
+      ${kpiRAG('Mesero Top',d.ms[0].n.split(' ')[0],'$'+d.ms[0].v.toLocaleString()+' ventas','#1 del período','g',T.acc)}
+      ${kpiRAG('vs Año Anterior','+6.8%','Equipo superó 2024','mismo período','g',T.acc)}
+      ${kpiRAG('Ticket Más Alto','$'+d.ms[0].pr.toFixed(2),d.ms[0].n.split(' ')[0],'por mesa','g','#1A8FA5')}
+      ${kpiRAG('Mesero a Mejorar',d.ms[4].n.split(' ')[0],'$'+d.ms[4].pr.toFixed(2)+'/mesa','⚠ Seguimiento','a','#E8860A')}
+      ${kpiRAG('Hora Pico','1pm','$1,150 promedio','Mayor volumen','g','#1DAF72')}
+    </div>
+    <div class="g21" style="padding-bottom:14px">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">🏆 Ventas por Mesero — 2025 vs 2024</div><button class="exp-btn" onclick="expChart('cEquipoComp')">⬇ PNG</button></div>
+        <canvas id="cEquipoComp" height="120"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">⏰ Ventas por Hora</div><button class="exp-btn" onclick="expChart('cHoras')">⬇ PNG</button></div>
+        <canvas id="cHoras" height="160"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">⚠ Datos de demostración. Los datos reales provienen de las fuentes del cliente. · datavisualsv.com</div>
+  <div class="footer" style="background:${T.footerBg}">© 2025 DataVisual SV · Paquete PRO · URL personalizada · Sistema RAG · 3 rondas de ajustes · hola@datavisualsv.com</div>`;
+}
+
+/* ──────────────────────────────────────
+   RAG ITEM CARD (pro exec)
+────────────────────────────────────── */
+function ragItem(label,val,cls,sub,T){
+  const clr={g:'#1DAF72',a:'#F39C12',r:'#E74C3C'};
+  return `<div class="rag-item">
+    <div class="ri-l">${label}</div>
+    <div class="ri-v">${val}</div>
+    <div class="ri-s" style="color:${clr[cls]}">
+      <span style="width:8px;height:8px;border-radius:50%;background:${clr[cls]};display:inline-block"></span>${sub}
+    </div>
+  </div>`;
+}
+
+/* ──────────────────────────────────────
+   CHARTS
+────────────────────────────────────── */
+function buildCharts(){
+  const T=THEMES[curPkg];
+  const d=D[curPer];
+  const vd=getSem(d.vd,curSem);
+  const vlbls=vd.map((_,i)=>{const b=curSem==='all'?0:parseInt(curSem)*7;return String(b+i+1);});
+
+  const ACC=T.acc;
+  const grid='#F0F4F8';
+  const BAR_COLORS=vd.map(v=>v>=1000?'rgba(29,175,114,.85)':v>=700?`${ACC}BB`:'rgba(231,76,60,.65)');
+
+  // Ventas diarias (shared id = cVentas)
+  mk('cVentas',{type:'bar',data:{labels:vlbls,datasets:[{label:'Ventas ($)',data:vd,
+    backgroundColor:BAR_COLORS,borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()}}},
+      scales:{y:{ticks:{callback:v=>'$'+v},grid:{color:grid}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+
+  // Donut productos
+  mk('cPlatos',{type:'doughnut',data:{labels:d.pl.l,datasets:[{data:d.pl.d,backgroundColor:COLS6,borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,cutout:'58%',plugins:{legend:{position:'bottom',labels:{font:{size:9},padding:4}},tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()}}}}});
+
+  // Meta vs Real (starter only)
+  mk('cMeta',{type:'bar',data:{labels:['Real','Meta'],datasets:[{data:[d.vm,d.meta],
+    backgroundColor:['rgba(29,175,114,.85)','rgba(231,76,60,.2)'],borderRadius:5}]},
+    options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:grid}},y:{grid:{display:false},ticks:{font:{size:11,weight:'700'}}}}}});
+
+  // Tendencia (growth)
+  mk('cTrend',{type:'line',data:{labels:TRENDS.meses,datasets:[
+    {label:'2025',data:TRENDS['2025'],borderColor:ACC,backgroundColor:ACC+'22',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:ACC,pointBorderColor:'#fff',pointBorderWidth:2},
+    {label:'2024',data:TRENDS['2024'],borderColor:'#94A3B8',borderDash:[5,5],borderWidth:1.5,pointRadius:3,backgroundColor:'transparent'}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}},
+      scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:grid}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+
+  // Comparativo 3 meses
+  mk('cComp',{type:'bar',data:{labels:PER.slice().reverse(),datasets:[
+    {label:'2025',data:[D[2].vm,D[1].vm,D[0].vm],backgroundColor:[ACC+'55',ACC+'88',ACC+'EE'],borderRadius:4},
+    {label:'Meta',data:[D[2].meta,D[1].meta,D[0].meta],type:'bar',backgroundColor:'rgba(231,76,60,.12)',borderWidth:1.5,borderColor:'#E74C3C',borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:grid}}}}});
+
+  // Por día de semana
+  mk('cDias',{type:'bar',data:{labels:['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],
+    datasets:[{data:[820,790,850,780,1100,1380,1200],
+      backgroundColor:['rgba(26,143,165,.7)','rgba(26,143,165,.7)','rgba(26,143,165,.7)','rgba(26,143,165,.7)',ACC+'BB',ACC+'EE',ACC+'CC'],borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{ticks:{callback:v=>'$'+v},grid:{color:grid}}}}});
+
+  // Costos pie
+  mk('cCostos',{type:'pie',data:{labels:['Ingredientes','Nómina','Renta','Servicios','Otros'],
+    datasets:[{data:[31,28,18,12,11],backgroundColor:['#E74C3C','#0F2C4A',ACC,'#1A8FA5','#94A3B8'],borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9},padding:4}}}}});
+
+  // PRO: Proyección
+  mk('cProj',{type:'line',data:{labels:['Ene','Feb','Mar','Abr','May','Jun*','Jul*','Ago*'],datasets:[
+    {label:'Real 2025',data:[22000,23500,24800,26100,28450,null,null,null],borderColor:ACC,backgroundColor:ACC+'22',fill:true,tension:.4,pointRadius:4},
+    {label:'Proyección',data:[null,null,null,null,28450,29800,31200,32500],borderColor:'#1DAF72',borderDash:[6,3],backgroundColor:'rgba(29,175,114,.08)',fill:true,tension:.4,pointRadius:4,borderWidth:2},
+    {label:'2024',data:[19800,21200,22500,23400,24200,null,null,null],borderColor:'#94A3B8',borderDash:[4,4],borderWidth:1.5,pointRadius:3}]},
+    options:{responsive:true,spanGaps:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}},
+      scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:grid}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+
+  // PRO: Year comp
+  mk('cYearComp',{type:'bar',data:{labels:PER.slice().reverse(),datasets:[
+    {label:'2025',data:[D[2].vm,D[1].vm,D[0].vm],backgroundColor:ACC+'CC',borderRadius:4},
+    {label:'2024',data:[ANT[2],ANT[1],ANT[0]],backgroundColor:'rgba(148,163,184,.5)',borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:grid}}}}});
+
+  // PRO: Inventario
+  mk('cInv',{type:'bar',data:{labels:d.inv.map(i=>i.p),datasets:[
+    {label:'Stock Actual',data:d.inv.map(i=>i.s),backgroundColor:d.inv.map(i=>i.t==='r'?'rgba(231,76,60,.8)':i.t==='a'?'rgba(243,156,18,.8)':'rgba(29,175,114,.8)'),borderRadius:4},
+    {label:'Stock Mínimo',data:d.inv.map(i=>i.min),backgroundColor:'rgba(10,18,40,.18)',borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{ticks:{callback:v=>v+' u.'},grid:{color:grid}}}}});
+
+  // PRO: Equipo comparativo
+  mk('cEquipoComp',{type:'bar',data:{labels:d.ms.map(m=>m.n.split(' ')[0]),datasets:[
+    {label:'2025',data:d.ms.map(m=>m.v),backgroundColor:ACC+'CC',borderRadius:4},
+    {label:'2024',data:d.ms.map(m=>Math.floor(m.v*0.88)),backgroundColor:'rgba(148,163,184,.5)',borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:grid}}}}});
+
+  // PRO: Horas
+  mk('cHoras',{type:'bar',data:{labels:d.hr.l,datasets:[{label:'Ventas ($)',data:d.hr.d,backgroundColor:ACC+'AA',borderRadius:3}]},
+    options:{responsive:true,plugins:{legend:{display:false}},
+      scales:{y:{ticks:{callback:v=>'$'+v},grid:{color:grid}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+
+  // Heatmap
+  const hm=document.getElementById('heatmap');
+  if(hm){
+    const days=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+    const hrs=['12am','6am','12pm','6pm'];
+    const vals=[[50,80,120,200],[60,90,140,250],[55,85,130,220],[50,80,125,210],[80,120,220,380],[100,150,280,420],[90,140,260,400]];
+    const mx=420;
+    let html='<div class="hm-wrap"><div></div>'+days.map(d=>`<div class="hm-hdr">${d}</div>`).join('');
+    hrs.forEach((h,hi)=>{
+      html+=`<div class="hm-lbl">${h}</div>`;
+      days.forEach((_,di)=>{
+        const v=vals[di][hi];const pct=v/mx;
+        const a=0.12+pct*0.88;
+        const bg=v>300?`rgba(231,76,60,${a})`:v>180?`rgba(243,156,18,${a})`:v>80?`${ACC}${Math.floor(a*255).toString(16).padStart(2,'0')}`:`rgba(29,175,114,${a*.6})`;
+        html+=`<div class="hm-cell" style="background:${bg}" title="${days[di]} ${h}: $${v}">$${v}</div>`;
+      });
+    });
+    html+='</div>';hm.innerHTML=html;
+  }
+
+  // Food cost bars
+  buildFoodCostBars(d,'fcList');
+}
+
+/* ──────────────────────────────────────
+   INIT
+────────────────────────────────────── */
+applyTheme(THEMES['s']);
 render();
 </script>
 </body>
